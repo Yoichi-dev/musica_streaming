@@ -142,7 +142,7 @@ export default {
       };
     },
     getComment(commentObj) {
-      if (commentObj.cm != "" || commentObj.cm != null) {
+      if (commentObj.cm != "" || commentObj.cm != undefined) {
         this.commentData.unshift({
           id: commentObj.u,
           name: commentObj.ac,
