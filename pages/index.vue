@@ -55,15 +55,18 @@ export default {
           }
         });
 
-      if ((preFlg = 1)) {
+      if (preFlg == 1) {
         await axios
           .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
           .then((response) => {
-            this.streamData = response.data[0];
-            console.log(this.streamData);
-            clearInterval(this.checkStreaming);
-            // 接続
-            this.connectSocket();
+            if (response.data.length != undefined) {
+              if (response.data) {
+                this.streamData = response.data[0];
+                clearInterval(this.checkStreaming);
+                // 接続
+                this.connectSocket();
+              }
+            }
           });
       } else if (flg) {
         // 配信情報取得
