@@ -110,21 +110,21 @@ export default {
           }
         } else if (Object.keys(getJson).length === 12) {
           // ギフトログ
-          this.fallGift(getJson);
-          // if (getJson.gt == 2) {
-          //   // 投票
-          //   if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
-          //   } else if (getJson.g == 1601) {
-          //     // 虹星
-          //     this.fallGift(getJson);
-          //   } else {
-          //     // 無料
-          //     this.fallGift(getJson);
-          //   }
-          // } else {
-          //   // 有料
-          //   this.fallGift(getJson);
-          // }
+          // this.fallGift(getJson);
+          if (getJson.gt == 2) {
+            // 投票
+            if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
+            } else if (getJson.g == 1601) {
+              // 虹星
+              this.fallGift(getJson);
+            } else {
+              // 無料
+              this.fallGiftFree(getJson);
+            }
+          } else {
+            // 有料
+            this.fallGift(getJson);
+          }
         } else if (Object.keys(getJson).length === 5) {
           // テロップ
           this.telop = getJson.telop;
@@ -149,6 +149,50 @@ export default {
           comment: commentObj.cm,
           flg: commentObj.ua,
           avatar: commentObj.av,
+        });
+      }
+    },
+    fallGiftFree(gift) {
+      // 画面幅を取得
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+
+      // ギフトの数分ループ
+      for (let i = 0; i < gift.n; i++) {
+        // 要素のID
+        let id = `gift_${gift.u}_${gift.g}_${i}`;
+        // ギフト画像の要素を作成
+        let giftImgElement = document.createElement("img");
+        // 画像を設定
+        if (i <= 5) {
+          // giftImgElement.src = `~/assets/image/${i}.png`;
+          giftImgElement.src = require(`@/assets/image/${i}.png`);
+          giftImgElement.style.width = "50px";
+        } else if (i == 6) {
+          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
+          giftImgElement.style.width = "50px";
+        } else {
+          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
+        }
+
+        // IDを設定
+        giftImgElement.setAttribute("id", id);
+        // 配置位置を設定
+        giftImgElement.style.position = "absolute";
+        giftImgElement.style.top = "-25px"; // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(10, width - 70) + "px"; // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById("gift").append(giftImgElement);
+
+        // 動きを追加
+        // 動かす要素IDを指定
+        TweenMax.to(`#${id}`, {
+          duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
+          rotation: this.getRandomNum(90, 720), // 回転角度
+          y: height - 60, // 落ちる高さ
+          onComplete: () => {
+            document.getElementById(id).remove(); // 終わったら要素を削除
+          },
         });
       }
     },
