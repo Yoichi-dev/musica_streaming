@@ -37,18 +37,35 @@ export default {
   methods: {
     async checkLive() {
       let flg = false;
+      let preFlg = 0;
       // 配信しているか確認
       await axios
         .get(`${process.env.API_URL}/api/users/${this.roomId}`)
         .then((response) => {
           if (response.data.is_onlive) {
-            flg = true;
-            clearInterval(this.checkStreaming);
+            // プレミアライブ中か？
+            if (response.data.premium_room_type == 1) {
+              preFlg = 1;
+            } else {
+              flg = true;
+              clearInterval(this.checkStreaming);
+            }
           } else {
             console.log("配信停止中");
           }
         });
-      if (flg) {
+
+      if ((preFlg = 1)) {
+        await axios
+          .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
+          .then((response) => {
+            this.streamData = response.data[0];
+            console.log(this.streamData);
+            clearInterval(this.checkStreaming);
+            // 接続
+            this.connectSocket();
+          });
+      } else if (flg) {
         // 配信情報取得
         await this.getLiveData();
         // 接続
