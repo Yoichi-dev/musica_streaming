@@ -37,7 +37,7 @@ export default {
   methods: {
     async checkLive() {
       let flg = false;
-      let preFlg = 0;
+      let preFlg = false;
       // 配信しているか確認
       await axios
         .get(`${process.env.API_URL}/api/users/${this.roomId}`)
@@ -45,7 +45,7 @@ export default {
           if (response.data.is_onlive) {
             // プレミアライブ中か？
             if (response.data.premium_room_type == 1) {
-              preFlg = 1;
+              preFlg = true;
             } else {
               flg = true;
               clearInterval(this.checkStreaming);
@@ -55,7 +55,9 @@ export default {
           }
         });
 
-      if (preFlg == 1) {
+      console.log(flg);
+      console.log(preFlg);
+      if (preFlg) {
         await axios
           .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
           .then((response) => {
@@ -69,6 +71,7 @@ export default {
             }
           });
       } else if (flg) {
+        console.log();
         // 配信情報取得
         await this.getLiveData();
         // 接続
