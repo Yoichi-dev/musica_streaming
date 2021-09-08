@@ -230,6 +230,7 @@ export default {
         let giftImgElement = document.createElement("img");
         // 画像を設定
         giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
+        giftImgElement.style.width = "100px";
         // IDを設定
         giftImgElement.setAttribute("id", id);
         // 配置位置を設定
