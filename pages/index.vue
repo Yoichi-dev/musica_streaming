@@ -2,6 +2,7 @@
   <div class="bgimg" id="gift">
     <Time />
     <Comment :commentData="commentData" />
+    <Telop :telop="telop" />
   </div>
 </template>
 
@@ -12,6 +13,7 @@ export default {
   data() {
     return {
       roomId: "373889",
+      telop: "",
       commentData: [],
       giftData: [],
       streamData: null,
@@ -154,9 +156,6 @@ export default {
             this.socket.close();
             // alert("配信が終了しました");
             location.reload();
-          }
-          if (getJson.t == 5) {
-            // 不明
           }
         } else {
         }
