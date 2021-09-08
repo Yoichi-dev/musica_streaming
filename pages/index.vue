@@ -2,7 +2,7 @@
   <div class="bgimg" id="gift">
     <Time />
     <Comment :commentData="commentData" />
-    <Telop :telop="telop" />
+    <!-- <Telop :telop="telop" /> -->
   </div>
 </template>
 
