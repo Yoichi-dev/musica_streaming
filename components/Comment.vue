@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="commentArea scrollbar">
-      <div
-        class="kaiwa line"
+      <div id="comment"></div>
+      <!-- <div
         v-for="(comment, index) in commentData"
         :key="index"
+        :class="'slidein kaiwa line comm' + index"
       >
         <div class="name">{{ comment.name }}</div>
         <div class="fukidasi left">
@@ -18,7 +19,7 @@
             alt=""
           />{{ comment.comment }}
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -26,10 +27,43 @@
 <script>
 export default {
   props: ["commentData"],
+  watch: {
+    commentData: function (newData, oldData) {
+      this.addComment(newData);
+    },
+  },
+  methods: {
+    addComment(comment) {
+      let element1 = document.createElement("div");
+      element1.classList.add("slidein");
+      element1.classList.add("kaiwa");
+      element1.classList.add("line");
+
+      let element2 = document.createElement("div");
+      element2.classList.add("name");
+      element2.textContent = comment.name;
+
+      let element3 = document.createElement("div");
+      element3.classList.add("fukidasi");
+      element3.classList.add("left");
+      element3.textContent = comment.comment;
+
+      let giftImgElement = document.createElement("img");
+      giftImgElement.classList.add("icon");
+      giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+
+      element1.append(element2);
+      element1.append(element3);
+      element3.append(giftImgElement);
+
+      let myMain = document.getElementById("comment");
+      myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style>
 .scrollbar {
   overflow: scroll;
 }
@@ -44,6 +78,24 @@ export default {
   float: right;
   width: 19vw;
   height: 57vh;
+}
+
+.slidein {
+  animation: slideIn 1s cubic-bezier(0.25, 1, 0.5, 1) 1 forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(180px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+  }
+  40%,
+  100% {
+    opacity: 1;
+  }
 }
 
 .kaiwa.line {

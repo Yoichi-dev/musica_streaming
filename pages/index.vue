@@ -126,28 +126,37 @@ export default {
         if (Object.keys(getJson).length === 9) {
           // コメントログ
           // カウント
-          if (Number.isFinite(Number(getJson.cm)) && Number(getJson.cm) <= 50) {
+          let commentFormat = getJson.cm.replace(/[０-９]/g, (s) => {
+            return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+          });
+          if (
+            Number.isFinite(Number(commentFormat)) &&
+            Number(commentFormat) <= 50
+          ) {
             // this.getCount(getJson);
           } else {
             this.getComment(getJson);
           }
         } else if (Object.keys(getJson).length === 12) {
           // ギフトログ
-          // this.fallGift(getJson);
-          if (getJson.gt == 2) {
-            // 投票
-            if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
-            } else if (getJson.g == 1601) {
-              // 虹星
-              this.fallGift(getJson);
+          if (document.hasFocus()) {
+            if (getJson.gt == 2) {
+              // 投票
+              if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
+              } else if (getJson.g == 1601) {
+                // 虹星
+                this.fallGift(getJson);
+              } else {
+                // 無料
+                this.fallGiftFree(getJson);
+              }
             } else {
-              // 無料
-              this.fallGiftFree(getJson);
+              // 有料
+              this.fallGift(getJson);
             }
-          } else {
-            // 有料
-            this.fallGift(getJson);
           }
+
+          // this.fallGift(getJson);
         } else if (Object.keys(getJson).length === 5) {
           // テロップ
           this.telop = getJson.telop;
@@ -163,13 +172,20 @@ export default {
     },
     getComment(commentObj) {
       if (commentObj.cm != undefined) {
-        this.commentData.unshift({
+        this.commentData = {
           id: commentObj.u,
           name: commentObj.ac,
           comment: commentObj.cm,
           flg: commentObj.ua,
           avatar: commentObj.av,
-        });
+        };
+        // this.commentData.unshift({
+        //   id: commentObj.u,
+        //   name: commentObj.ac,
+        //   comment: commentObj.cm,
+        //   flg: commentObj.ua,
+        //   avatar: commentObj.av,
+        // });
       }
     },
     fallGiftFree(gift) {
