@@ -50,6 +50,7 @@ export default {
 
       let giftImgElement = document.createElement("img");
       giftImgElement.classList.add("icon");
+      giftImgElement.classList.add("jump");
       giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
 
       element1.append(element2);
@@ -98,6 +99,24 @@ export default {
   }
 }
 
+.jump {
+  animation-name: jump;
+  animation-iteration-count: 2;
+  animation-duration: 0.5s;
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
 .kaiwa.line {
   width: 100%;
   max-width: 500px;
@@ -131,7 +150,7 @@ export default {
 /*グループのときのフキダシ*/
 .kaiwa.line .name + .fukidasi.left {
   font-size: 30px;
-  margin-top: 5px;
+  margin-top: 15px;
 }
 /*相手の名前*/
 .kaiwa.line .name {
