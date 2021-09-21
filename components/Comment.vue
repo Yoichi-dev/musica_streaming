@@ -78,7 +78,7 @@ export default {
   margin-right: 7px;
   float: right;
   width: 19vw;
-  height: 57vh;
+  height: 68vh;
 }
 
 .slidein {
