@@ -34,31 +34,70 @@ export default {
   },
   methods: {
     addComment(comment) {
-      let element1 = document.createElement("div");
-      element1.classList.add("slidein");
-      element1.classList.add("kaiwa");
-      element1.classList.add("line");
+      // ぽん
+      if (
+        comment.comment == "ぽん" ||
+        comment.comment == "ポン" ||
+        comment.comment == "ぽん！" ||
+        comment.comment == "ポン！"
+      ) {
+        let element1 = document.createElement("div");
+        element1.classList.add("slidein");
+        element1.classList.add("kaiwa");
+        element1.classList.add("line");
 
-      let element2 = document.createElement("div");
-      element2.classList.add("name");
-      element2.textContent = comment.name;
+        let element2 = document.createElement("div");
+        element2.classList.add("name");
+        element2.textContent = comment.name;
 
-      let element3 = document.createElement("div");
-      element3.classList.add("fukidasi");
-      element3.classList.add("left");
-      element3.textContent = comment.comment;
+        let element3 = document.createElement("div");
+        element3.classList.add("fukidasi");
+        element3.classList.add("left");
+        element3.classList.add("stamp");
 
-      let giftImgElement = document.createElement("img");
-      giftImgElement.classList.add("icon");
-      giftImgElement.classList.add("jump");
-      giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/pon.png");
 
-      element1.append(element2);
-      element1.append(element3);
-      element3.append(giftImgElement);
+        let giftImgElement = document.createElement("img");
+        giftImgElement.classList.add("icon");
+        giftImgElement.classList.add("jump");
+        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
 
-      let myMain = document.getElementById("comment");
-      myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
+
+        let myMain = document.getElementById("comment");
+        myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
+      } else {
+        let element1 = document.createElement("div");
+        element1.classList.add("slidein");
+        element1.classList.add("kaiwa");
+        element1.classList.add("line");
+
+        let element2 = document.createElement("div");
+        element2.classList.add("name");
+        element2.textContent = comment.name;
+
+        let element3 = document.createElement("div");
+        element3.classList.add("fukidasi");
+        element3.classList.add("left");
+        element3.textContent = comment.comment;
+
+        let giftImgElement = document.createElement("img");
+        giftImgElement.classList.add("icon");
+        giftImgElement.classList.add("jump");
+        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(giftImgElement);
+
+        let myMain = document.getElementById("comment");
+        myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
+      }
     },
   },
 };
@@ -79,6 +118,13 @@ export default {
   float: right;
   width: 19vw;
   height: 68vh;
+}
+
+.stamp {
+  background: initial !important;
+}
+.stamp::after {
+  box-shadow: initial !important;
 }
 
 .slidein {
@@ -129,7 +175,7 @@ export default {
   line-height: 1.4;
   overflow: hidden;
 }
-/*フキダシ共通*/
+
 .kaiwa.line .fukidasi {
   position: relative;
   display: inline-block;
@@ -141,25 +187,25 @@ export default {
   clear: both;
   box-sizing: content-box; /*はてな用*/
 }
-/*フキダシ左*/
+
 .kaiwa.line .fukidasi.left {
   float: left;
   margin-left: 62px;
   background: white;
 }
-/*グループのときのフキダシ*/
+
 .kaiwa.line .name + .fukidasi.left {
   font-size: 30px;
   margin-top: 15px;
 }
-/*相手の名前*/
+
 .kaiwa.line .name {
   clear: right;
   font-size: 20px;
   margin-left: 62px;
   color: white;
 }
-/*ユーザアイコン*/
+
 .kaiwa.line .icon {
   margin-top: 10px;
   position: absolute;
@@ -168,11 +214,11 @@ export default {
   left: -54px;
   top: -2px;
 }
-/*グループのときのユーザアイコン*/
+
 .kaiwa.line .name + .left .icon {
   top: -1.8em;
 }
-/*しっぽ共通*/
+
 .kaiwa.line .fukidasi::after {
   position: absolute;
   content: "";
@@ -180,21 +226,14 @@ export default {
   height: 36px;
   top: -21px;
 }
-/*しっぽ左*/
+
 .kaiwa.line .fukidasi.left:after {
   left: -10px;
   border-radius: 18px 0 6px 18px/18px 0 1px 18px;
   box-shadow: -3px -15px 0 -5px white inset;
 }
-/*しっぽ右*/
-.kaiwa.line .fukidasi.right::after {
-  right: -10px;
-  border-radius: 0 18px 18px 6px/0 18px 18px 1px;
-  box-shadow: inset 3px -15px 0 -5px #7adc40;
-}
-/*フキダシが続いてしっぽがないとき*/
-.kaiwa.line .left + .left::after,
-.kaiwa.line .right + .right::after {
+
+.kaiwa.line .left + .left::after {
   content: none;
 }
 </style>
