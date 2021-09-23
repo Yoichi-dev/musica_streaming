@@ -71,7 +71,6 @@ export default {
             }
           });
       } else if (flg) {
-        console.log();
         // 配信情報取得
         await this.getLiveData();
         // 接続

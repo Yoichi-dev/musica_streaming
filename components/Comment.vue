@@ -34,6 +34,19 @@ export default {
   },
   methods: {
     addComment(comment) {
+      let element1 = document.createElement("div");
+      element1.classList.add("slidein");
+      element1.classList.add("kaiwa");
+      element1.classList.add("line");
+
+      let element2 = document.createElement("div");
+      element2.classList.add("name");
+      element2.textContent = comment.name;
+
+      let element3 = document.createElement("div");
+      element3.classList.add("fukidasi");
+      element3.classList.add("left");
+
       // ぽん
       if (
         comment.comment == "ぽん" ||
@@ -41,18 +54,6 @@ export default {
         comment.comment == "ぽん！" ||
         comment.comment == "ポン！"
       ) {
-        let element1 = document.createElement("div");
-        element1.classList.add("slidein");
-        element1.classList.add("kaiwa");
-        element1.classList.add("line");
-
-        let element2 = document.createElement("div");
-        element2.classList.add("name");
-        element2.textContent = comment.name;
-
-        let element3 = document.createElement("div");
-        element3.classList.add("fukidasi");
-        element3.classList.add("left");
         element3.classList.add("stamp");
 
         let stampElement = document.createElement("img");
@@ -68,22 +69,23 @@ export default {
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
+      } else if (comment.comment == "鹿") {
+        element3.classList.add("stamp");
 
-        let myMain = document.getElementById("comment");
-        myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/sika.png");
+
+        let giftImgElement = document.createElement("img");
+        giftImgElement.classList.add("icon");
+        giftImgElement.classList.add("jump");
+        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
       } else {
-        let element1 = document.createElement("div");
-        element1.classList.add("slidein");
-        element1.classList.add("kaiwa");
-        element1.classList.add("line");
-
-        let element2 = document.createElement("div");
-        element2.classList.add("name");
-        element2.textContent = comment.name;
-
-        let element3 = document.createElement("div");
-        element3.classList.add("fukidasi");
-        element3.classList.add("left");
         element3.textContent = comment.comment;
 
         let giftImgElement = document.createElement("img");
@@ -94,10 +96,10 @@ export default {
         element1.append(element2);
         element1.append(element3);
         element3.append(giftImgElement);
-
-        let myMain = document.getElementById("comment");
-        myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
       }
+
+      let myMain = document.getElementById("comment");
+      myMain.parentNode.insertBefore(element1, myMain.nextElementSibling);
     },
   },
 };
