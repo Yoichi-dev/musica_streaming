@@ -213,11 +213,11 @@ export default {
         this.fallAther(commentObj.u, "fallPon", 30, 100);
       }
       // 草エフェクト
-      if (commentObj.cm == "草") {
+      if (commentObj.cm == "草" || commentObj.cm == "www") {
         this.fallAther(commentObj.u, "kusa", 100, 100);
       }
       // 大草原エフェクト
-      if (commentObj.cm == "大草原") {
+      if (commentObj.cm == "大草原" || commentObj.cm == "wwwwww") {
         this.fallAther(commentObj.u, "daisougen", 100, 200);
       }
     },

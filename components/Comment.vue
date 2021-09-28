@@ -69,7 +69,7 @@ export default {
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
-      } else if (comment.comment == "鹿") {
+      } else if (comment.comment == "鹿" || comment.comment == "しか") {
         element3.classList.add("stamp");
 
         let stampElement = document.createElement("img");
