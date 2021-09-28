@@ -213,12 +213,25 @@ export default {
         this.fallAther(commentObj.u, "fallPon", 30, 100);
       }
       // 草エフェクト
-      if (commentObj.cm == "草" || commentObj.cm == "www") {
+      if (
+        commentObj.cm == "草" ||
+        commentObj.cm == "www" ||
+        commentObj.cm == "ｗｗｗ"
+      ) {
         this.fallAther(commentObj.u, "kusa", 100, 100);
       }
       // 大草原エフェクト
-      if (commentObj.cm == "大草原" || commentObj.cm == "wwwwww") {
+      if (
+        commentObj.cm == "大草原" ||
+        commentObj.cm == "wwwwww" ||
+        commentObj.cm == "ｗｗｗｗｗｗｗｗ"
+      ) {
         this.fallAther(commentObj.u, "daisougen", 100, 200);
+      }
+      // 拍手
+      if (commentObj.cm == "88888888" || commentObj.cm == "８８８８８８８８") {
+        this.fallAther(commentObj.u, "888", 50, 100);
+        this.fallAther(commentObj.u, "8888", 50, 100);
       }
     },
     fallGiftFree(gift) {
