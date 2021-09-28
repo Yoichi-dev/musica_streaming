@@ -171,13 +171,29 @@ export default {
     },
     getComment(commentObj) {
       if (commentObj.cm != undefined) {
-        this.commentData = {
-          id: commentObj.u,
-          name: commentObj.ac,
-          comment: commentObj.cm,
-          flg: commentObj.ua,
-          avatar: commentObj.av,
-        };
+        if (commentObj.u == "3699368") {
+          // 管理者機能
+          let msg = commentObj.cm.split("_");
+          if (msg[0] === "g") {
+            this.fallAdminGift(commentObj.u, msg[1], msg[2]);
+          } else {
+            this.commentData = {
+              id: commentObj.u,
+              name: commentObj.ac,
+              comment: commentObj.cm,
+              flg: commentObj.ua,
+              avatar: commentObj.av,
+            };
+          }
+        } else {
+          this.commentData = {
+            id: commentObj.u,
+            name: commentObj.ac,
+            comment: commentObj.cm,
+            flg: commentObj.ua,
+            avatar: commentObj.av,
+          };
+        }
         // this.commentData.unshift({
         //   id: commentObj.u,
         //   name: commentObj.ac,
@@ -191,9 +207,18 @@ export default {
         commentObj.cm == "ぽん" ||
         commentObj.cm == "ポン" ||
         commentObj.cm == "ぽん！" ||
-        commentObj.cm == "ポン！"
+        commentObj.cm == "ポン！" ||
+        commentObj.cm == "pon"
       ) {
-        this.fallPon(commentObj.u);
+        this.fallAther(commentObj.u, "fallPon", 30, 100);
+      }
+      // 草エフェクト
+      if (commentObj.cm == "草") {
+        this.fallAther(commentObj.u, "kusa", 100, 100);
+      }
+      // 大草原エフェクト
+      if (commentObj.cm == "大草原") {
+        this.fallAther(commentObj.u, "daisougen", 100, 200);
       }
     },
     fallGiftFree(gift) {
@@ -275,19 +300,54 @@ export default {
         });
       }
     },
-    fallPon(userId) {
+    fallAther(userId, img, num, size) {
       // 画面幅を取得
       let width = window.innerWidth;
       let height = window.innerHeight;
 
       // ギフトの数分ループ
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < num; i++) {
         // 要素のID
         let id = `pon_${userId}_${i}`;
         // ギフト画像の要素を作成
         let giftImgElement = document.createElement("img");
         // 画像を設定
-        giftImgElement.src = require("@/assets/image/fallPon.png");
+        giftImgElement.src = require(`@/assets/image/${img}.png`);
+        giftImgElement.style.width = `${size}px`;
+        // IDを設定
+        giftImgElement.setAttribute("id", id);
+        // 配置位置を設定
+        giftImgElement.style.position = "absolute";
+        giftImgElement.style.top = "-25px"; // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(10, width - 70) + "px"; // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById("gift").append(giftImgElement);
+
+        // 動きを追加
+        // 動かす要素IDを指定
+        TweenMax.to(`#${id}`, {
+          duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
+          rotation: this.getRandomNum(90, 720), // 回転角度
+          y: height - 60, // 落ちる高さ
+          onComplete: () => {
+            document.getElementById(id).remove(); // 終わったら要素を削除
+          },
+        });
+      }
+    },
+    fallAdminGift(userId, gid, num) {
+      // 画面幅を取得
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+
+      // ギフトの数分ループ
+      for (let i = 0; i < num; i++) {
+        // 要素のID
+        let id = `gift_${userId}_${i}`;
+        // ギフト画像の要素を作成
+        let giftImgElement = document.createElement("img");
+        // 画像を設定
+        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gid}_s.png`;
         giftImgElement.style.width = "100px";
         // IDを設定
         giftImgElement.setAttribute("id", id);

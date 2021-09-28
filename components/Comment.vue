@@ -47,6 +47,11 @@ export default {
       element3.classList.add("fukidasi");
       element3.classList.add("left");
 
+      let giftImgElement = document.createElement("img");
+      giftImgElement.classList.add("icon");
+      giftImgElement.classList.add("jump");
+      giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+
       // ぽん
       if (
         comment.comment == "ぽん" ||
@@ -60,11 +65,6 @@ export default {
         stampElement.width = "200";
         stampElement.src = require("@/assets/image/pon.png");
 
-        let giftImgElement = document.createElement("img");
-        giftImgElement.classList.add("icon");
-        giftImgElement.classList.add("jump");
-        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
-
         element1.append(element2);
         element1.append(element3);
         element3.append(stampElement);
@@ -76,22 +76,12 @@ export default {
         stampElement.width = "200";
         stampElement.src = require("@/assets/image/sika.png");
 
-        let giftImgElement = document.createElement("img");
-        giftImgElement.classList.add("icon");
-        giftImgElement.classList.add("jump");
-        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
-
         element1.append(element2);
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
       } else {
         element3.textContent = comment.comment;
-
-        let giftImgElement = document.createElement("img");
-        giftImgElement.classList.add("icon");
-        giftImgElement.classList.add("jump");
-        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
 
         element1.append(element2);
         element1.append(element3);
@@ -211,8 +201,8 @@ export default {
 .kaiwa.line .icon {
   margin-top: 10px;
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   left: -54px;
   top: -2px;
 }
