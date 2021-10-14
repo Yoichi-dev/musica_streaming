@@ -246,11 +246,11 @@ export default {
         // ギフト画像の要素を作成
         let giftImgElement = document.createElement("img");
         // 画像を設定
-        if (i <= 8) {
+        if (i <= 9) {
           // giftImgElement.src = `~/assets/image/${i}.png`;
           giftImgElement.src = require(`@/assets/image/${i}.png`);
           giftImgElement.style.width = "50px";
-        } else if (i == 9) {
+        } else if (i == 10) {
           giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
           giftImgElement.style.width = "50px";
         } else {
