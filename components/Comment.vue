@@ -60,11 +60,18 @@ export default {
         comment.comment == "ポン！"
       ) {
         element3.classList.add("stamp");
-
         let stampElement = document.createElement("img");
         stampElement.width = "200";
         stampElement.src = require("@/assets/image/pon.png");
-
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
+      } else if (comment.comment == "ぽん.") {
+        element3.classList.add("stamp");
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/pon_bk.png");
         element1.append(element2);
         element1.append(element3);
         element3.append(stampElement);
