@@ -76,12 +76,31 @@ export default {
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
-      } else if (comment.comment == "鹿" || comment.comment == "しか") {
+      } else if (
+        comment.comment == "シカ" ||
+        comment.comment == "しか" ||
+        comment.comment == "鹿"
+      ) {
         element3.classList.add("stamp");
 
         let stampElement = document.createElement("img");
         stampElement.width = "200";
         stampElement.src = require("@/assets/image/sika.png");
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
+      } else if (
+        comment.comment == "クマ" ||
+        comment.comment == "くま" ||
+        comment.comment == "熊"
+      ) {
+        element3.classList.add("stamp");
+
+        let stampElement = document.createElement("img");
+        stampElement.width = "125";
+        stampElement.src = require("@/assets/image/8.png");
 
         element1.append(element2);
         element1.append(element3);
