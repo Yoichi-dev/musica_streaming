@@ -212,6 +212,9 @@ export default {
       ) {
         this.fallAther(commentObj.u, "fallPon", 30, 100);
       }
+      if (commentObj.cm == "ぽん.") {
+        this.fallAther(commentObj.u, "fallPon_bk", 30, 100);
+      }
       // 草エフェクト
       if (
         commentObj.cm == "草" ||
