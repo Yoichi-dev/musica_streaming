@@ -96,7 +96,7 @@ export default {
       };
       // エラー発生時
       this.socket.onerror = (error) => {
-        alert("エラーが発生しました\nページをリロードしてください");
+        // alert("エラーが発生しました\nページをリロードしてください");
         location.reload();
       };
       // 疎通確認
@@ -112,7 +112,7 @@ export default {
         }
 
         if (data.data === "ERR") {
-          alert("エラーが発生しました\nページをリロードしてください");
+          // alert("エラーが発生しました\nページをリロードしてください");
           location.reload();
           return;
         }
