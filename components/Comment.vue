@@ -106,6 +106,21 @@ export default {
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
+      } else if (
+        comment.comment == "ネコ" ||
+        comment.comment == "ねこ" ||
+        comment.comment == "猫"
+      ) {
+        element3.classList.add("stamp");
+
+        let stampElement = document.createElement("img");
+        stampElement.width = "125";
+        stampElement.src = require("@/assets/image/neko.png");
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
       } else {
         element3.textContent = comment.comment;
 
