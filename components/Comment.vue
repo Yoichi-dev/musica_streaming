@@ -114,8 +114,25 @@ export default {
         element3.classList.add("stamp");
 
         let stampElement = document.createElement("img");
-        stampElement.width = "125";
+        stampElement.width = "200";
         stampElement.src = require("@/assets/image/neko.png");
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
+      } else if (
+        comment.comment == "88888888" ||
+        comment.comment == "８８８８８８８８" ||
+        comment.comment == "はち" ||
+        comment.comment == "ハチ" ||
+        comment.comment == "蜂"
+      ) {
+        element3.classList.add("stamp");
+
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/8_0.png");
 
         element1.append(element2);
         element1.append(element3);

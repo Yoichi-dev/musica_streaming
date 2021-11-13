@@ -233,8 +233,10 @@ export default {
       }
       // 拍手
       if (commentObj.cm == "88888888" || commentObj.cm == "８８８８８８８８") {
-        this.fallAther(commentObj.u, "888", 50, 100);
-        this.fallAther(commentObj.u, "8888", 50, 100);
+        this.fallAther(commentObj.u, "8_0", 50, 100);
+        this.fallAther(commentObj.u, "8_1", 25, 50);
+        this.fallAther(commentObj.u, "8_2", 25, 50);
+        this.fallAther(commentObj.u, "8_3", 25, 50);
       }
     },
     fallGiftFree(gift) {
