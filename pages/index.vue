@@ -1,6 +1,6 @@
 <template>
   <div class="bgimg" id="gift">
-    <Time />
+    <Time :startTime="startTime" />
     <Comment :commentData="commentData" />
     <!-- <Telop :telop="telop" /> -->
   </div>
@@ -19,6 +19,7 @@ export default {
       streamData: null,
       socket: null,
       checkStreaming: null,
+      startTime: null,
     };
   },
   head() {
@@ -52,6 +53,7 @@ export default {
               flg = true;
               clearInterval(this.checkStreaming);
             }
+            this.startTime = response.data.current_live_started_at;
           } else {
             console.log("配信停止中");
           }
