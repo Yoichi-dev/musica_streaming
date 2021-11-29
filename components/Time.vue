@@ -34,26 +34,28 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.query.timer === undefined) {
-      document.getElementById("addcount").hidden = true;
-    } else {
-      if (this.$route.query.timer == 20 || this.$route.query.timer == 80) {
-        // this.inputTimer = this.$route.query.timer * 60;
-        this.countTime = 1200;
-      } else {
+    if (this.$route.query.watch === undefined) {
+      if (this.$route.query.timer === undefined) {
         document.getElementById("addcount").hidden = true;
+      } else {
+        if (this.$route.query.timer == 20 || this.$route.query.timer == 80) {
+          // this.inputTimer = this.$route.query.timer * 60;
+          this.countTime = 1200;
+        } else {
+          document.getElementById("addcount").hidden = true;
+        }
       }
-    }
 
-    const day = function () {
-      const dt = dayjs(new Date());
-      const element = document.getElementById("t");
-      element.innerHTML = `<div id="time">${dt.format(
-        "HH"
-      )}<span id="colon">:</span>${dt.format("mm")}</div>
+      const day = function () {
+        const dt = dayjs(new Date());
+        const element = document.getElementById("t");
+        element.innerHTML = `<div id="time">${dt.format(
+          "HH"
+        )}<span id="colon">:</span>${dt.format("mm")}</div>
                            <div id="date">${dt.format("MM/DD ddd")}</div>`;
-    };
-    setInterval(day, 1000);
+      };
+      setInterval(day, 1000);
+    }
   },
   methods: {
     countTimerOne() {

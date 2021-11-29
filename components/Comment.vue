@@ -2,6 +2,7 @@
   <div>
     <div class="commentArea scrollbar">
       <div id="comment"></div>
+
       <!-- <div
         v-for="(comment, index) in commentData"
         :key="index"
@@ -20,6 +21,18 @@
           />{{ comment.comment }}
         </div>
       </div> -->
+    </div>
+    <div id="hidspace">
+      <img width="1px" :src="require('@/assets/image/tuna.png')" />
+      <img width="1px" :src="require('@/assets/image/sika.png')" />
+      <img width="1px" :src="require('@/assets/image/pon_bk.png')" />
+      <img width="1px" :src="require('@/assets/image/pon.png')" />
+      <img width="1px" :src="require('@/assets/image/neko.png')" />
+      <img width="1px" :src="require('@/assets/image/fish.png')" />
+      <img width="1px" :src="require('@/assets/image/fallPon_bk.png')" />
+      <img width="1px" :src="require('@/assets/image/fallPon.png')" />
+      <img width="1px" :src="require('@/assets/image/8.png')" />
+      <img width="1px" :src="require('@/assets/image/8_0.png')" />
     </div>
   </div>
 </template>
@@ -194,6 +207,10 @@ export default {
   float: right;
   width: 19vw;
   height: 68vh;
+}
+
+#hidspace {
+  opacity: 0;
 }
 
 .stamp {

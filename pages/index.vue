@@ -1,6 +1,6 @@
 <template>
   <div class="bgimg" id="gift">
-    <Time :startTime="startTime" />
+    <Time v-if="showFlg" :startTime="startTime" />
     <Comment :commentData="commentData" />
     <!-- <Telop :telop="telop" /> -->
   </div>
@@ -20,6 +20,8 @@ export default {
       socket: null,
       checkStreaming: null,
       startTime: null,
+      showFlg: true,
+      fallFlg: false,
     };
   },
   head() {
@@ -31,6 +33,9 @@ export default {
     // パラメータがある場合はテスト
     if (this.$route.query.id != undefined) {
       this.roomId = this.$route.query.id;
+    }
+    if (this.$route.query.watch != undefined) {
+      this.showFlg = false;
     }
     // 疎通確認
     this.checkStreaming = setInterval(() => {
@@ -104,6 +109,7 @@ export default {
       // 疎通確認
       setInterval(() => {
         this.socket.send("PING\tshowroom");
+        this.fallFlg = true;
       }, 60000);
       // メッセージ受信
       this.socket.onmessage = (data) => {
@@ -149,7 +155,9 @@ export default {
                 this.fallGift(getJson);
               } else {
                 // 無料
-                this.fallGiftFree(getJson);
+                if (this.fallFlg) {
+                  this.fallGiftFree(getJson);
+                }
               }
             } else {
               // 有料
