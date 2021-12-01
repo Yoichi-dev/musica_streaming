@@ -177,6 +177,22 @@ export default {
         element1.append(element3);
         element3.append(stampElement);
         element3.append(giftImgElement);
+      } else if (
+        comment.comment == "出陣" ||
+        comment.comment == "ほら貝" ||
+        comment.comment == "法螺貝" ||
+        comment.comment == "ホラ貝"
+      ) {
+        element3.classList.add("stamp");
+
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/hora.png");
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
       } else {
         element3.textContent = comment.comment;
 
