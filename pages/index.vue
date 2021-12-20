@@ -255,11 +255,11 @@ export default {
         commentObj.cm == "きゅうり" ||
         commentObj.cm == "キュウリ"
       ) {
-        this.fallAther(commentObj.u, "cucumber1", 25, 50);
-        this.fallAther(commentObj.u, "cucumber2", 25, 50);
-        this.fallAther(commentObj.u, "cucumber3", 25, 50);
-        this.fallAther(commentObj.u, "cucumber4", 25, 50);
-        this.fallAther(commentObj.u, "cucumber5", 25, 50);
+        this.fallAther(commentObj.u, "cucumber1", 25, 100);
+        this.fallAther(commentObj.u, "cucumber2", 25, 100);
+        this.fallAther(commentObj.u, "cucumber3", 25, 100);
+        this.fallAther(commentObj.u, "cucumber4", 25, 100);
+        this.fallAther(commentObj.u, "cucumber5", 25, 100);
       }
     },
     fallGiftFree(gift) {
