@@ -248,6 +248,19 @@ export default {
         this.fallAther(commentObj.u, "8_2", 25, 50);
         this.fallAther(commentObj.u, "8_3", 25, 50);
       }
+      // きゅうり
+      if (
+        commentObj.cm == 'ŧ‹"🥒ŧ‹"' ||
+        commentObj.cm == "🥒" ||
+        commentObj.cm == "きゅうり" ||
+        commentObj.cm == "キュウリ"
+      ) {
+        this.fallAther(commentObj.u, "cucumber1", 25, 50);
+        this.fallAther(commentObj.u, "cucumber2", 25, 50);
+        this.fallAther(commentObj.u, "cucumber3", 25, 50);
+        this.fallAther(commentObj.u, "cucumber4", 25, 50);
+        this.fallAther(commentObj.u, "cucumber5", 25, 50);
+      }
     },
     fallGiftFree(gift) {
       // 画面幅を取得
