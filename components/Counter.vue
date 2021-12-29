@@ -97,7 +97,7 @@ export default {
       ponImgElement.setAttribute("id", id);
 
       ponImgElement.style.position = "absolute";
-      ponImgElement.style.width = `300px`;
+      ponImgElement.style.width = `400px`;
       ponImgElement.style.zIndex = 999;
 
       ponImgElement.style.opacity = 0;
@@ -113,7 +113,7 @@ export default {
           "100%": { x: -240, y: 0, opacity: 0 },
           easeEach: "none",
         },
-        duration: 1.5,
+        duration: 2,
         onComplete: () => {
           document.getElementById(id).remove();
         },
