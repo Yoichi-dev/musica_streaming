@@ -98,6 +98,7 @@ export default {
 
       ponImgElement.style.position = "absolute";
       ponImgElement.style.width = `300px`;
+      ponImgElement.style.zIndex = 999;
 
       ponImgElement.style.opacity = 0;
 
@@ -140,11 +141,13 @@ export default {
   margin-top: 30vh;
   margin-left: 5vw;
   position: absolute;
+  z-index: 999;
 }
 
 .poncounter {
   margin-top: 20vh;
   margin-left: 3vw;
   position: absolute;
+  z-index: 999;
 }
 </style>

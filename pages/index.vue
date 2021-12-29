@@ -360,6 +360,7 @@ export default {
         // 画像を設定
         giftImgElement.src = require(`@/assets/image/${img}.png`);
         giftImgElement.style.width = `${size}px`;
+        giftImgElement.style.zIndex = 100;
         // IDを設定
         giftImgElement.setAttribute("id", id);
         // 配置位置を設定
