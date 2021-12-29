@@ -33,6 +33,7 @@
       <img width="1px" :src="require('@/assets/image/fallPon.png')" />
       <img width="1px" :src="require('@/assets/image/8.png')" />
       <img width="1px" :src="require('@/assets/image/8_0.png')" />
+      <img width="1px" :src="require('@/assets/image/musica.png')" />
     </div>
   </div>
 </template>

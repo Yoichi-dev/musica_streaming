@@ -1,5 +1,6 @@
 <template>
   <div class="bgimg" id="gift">
+    <Counter :pon="pon" />
     <Time v-if="showFlg" :startTime="startTime" />
     <Comment :commentData="commentData" />
     <!-- <Telop :telop="telop" /> -->
@@ -8,6 +9,7 @@
 
 <script>
 import axios from "axios";
+import { gsap } from "gsap";
 
 export default {
   data() {
@@ -22,6 +24,7 @@ export default {
       startTime: null,
       showFlg: true,
       fallFlg: false,
+      pon: 0,
     };
   },
   head() {
@@ -221,9 +224,11 @@ export default {
         commentObj.cm == "pon"
       ) {
         this.fallAther(commentObj.u, "fallPon", 30, 100);
+        this.pon++;
       }
       if (commentObj.cm == "ぽん.") {
         this.fallAther(commentObj.u, "fallPon_bk", 30, 100);
+        this.pon++;
       }
       // 草エフェクト
       if (
@@ -296,7 +301,7 @@ export default {
 
         // 動きを追加
         // 動かす要素IDを指定
-        TweenMax.to(`#${id}`, {
+        gsap.to(`#${id}`, {
           duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
           rotation: this.getRandomNum(90, 720), // 回転角度
           y: height - 60, // 落ちる高さ
@@ -331,7 +336,7 @@ export default {
 
         // 動きを追加
         // 動かす要素IDを指定
-        TweenMax.to(`#${id}`, {
+        gsap.to(`#${id}`, {
           duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
           rotation: this.getRandomNum(90, 720), // 回転角度
           y: height - 60, // 落ちる高さ
@@ -366,7 +371,7 @@ export default {
 
         // 動きを追加
         // 動かす要素IDを指定
-        TweenMax.to(`#${id}`, {
+        gsap.to(`#${id}`, {
           duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
           rotation: this.getRandomNum(90, 720), // 回転角度
           y: height - 60, // 落ちる高さ
@@ -401,7 +406,7 @@ export default {
 
         // 動きを追加
         // 動かす要素IDを指定
-        TweenMax.to(`#${id}`, {
+        gsap.to(`#${id}`, {
           duration: this.getRandomNum(2, 5), // 2秒～5秒の間で移動
           rotation: this.getRandomNum(90, 720), // 回転角度
           y: height - 60, // 落ちる高さ
