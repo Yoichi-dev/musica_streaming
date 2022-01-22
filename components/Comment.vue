@@ -34,6 +34,7 @@
       <img width="1px" :src="require('@/assets/image/8.png')" />
       <img width="1px" :src="require('@/assets/image/8_0.png')" />
       <img width="1px" :src="require('@/assets/image/musica.png')" />
+      <img width="1px" :src="require('@/assets/image/kubi.png')" />
     </div>
   </div>
 </template>
@@ -189,6 +190,22 @@ export default {
         let stampElement = document.createElement("img");
         stampElement.width = "200";
         stampElement.src = require("@/assets/image/hora.png");
+
+        element1.append(element2);
+        element1.append(element3);
+        element3.append(stampElement);
+        element3.append(giftImgElement);
+      } else if (
+        comment.comment == "生首" ||
+        comment.comment == "くび" ||
+        comment.comment == "なまくび" ||
+        comment.comment == "クビ"
+      ) {
+        element3.classList.add("stamp");
+
+        let stampElement = document.createElement("img");
+        stampElement.width = "200";
+        stampElement.src = require("@/assets/image/kubi.png");
 
         element1.append(element2);
         element1.append(element3);

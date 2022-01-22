@@ -259,6 +259,15 @@ export default {
         this.fallAther(commentObj.u, "cucumber4", 25, 100);
         this.fallAther(commentObj.u, "cucumber5", 25, 100);
       }
+      // 生首
+      if (
+        commentObj.cm == "生首" ||
+        commentObj.cm == "首" ||
+        commentObj.cm == "なまくび" ||
+        commentObj.cm == "くび"
+      ) {
+        this.fallAther(commentObj.u, "kubi", 25, 100);
+      }
     },
     fallGiftFree(gift) {
       // 画面幅を取得
