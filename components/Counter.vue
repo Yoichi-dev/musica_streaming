@@ -93,7 +93,8 @@ export default {
     execImg(count) {
       let id = `pon_${count}`;
       let ponImgElement = document.createElement("img");
-      ponImgElement.src = require(`@/assets/image/musica.png`);
+      ponImgElement.src = require(`@/assets/image/PONmujika_NonLoop.gif`);
+      ponImgElement.src = ponImgElement.src + `?id=${count}`;
       ponImgElement.setAttribute("id", id);
 
       ponImgElement.style.position = "absolute";
@@ -106,11 +107,9 @@ export default {
 
       gsap.to(`#${id}`, {
         keyframes: {
-          "0%": { x: 0, y: 0, opacity: 0 },
-          "25%": { x: -60, y: -80, opacity: 0.8 },
-          "50%": { x: -120, y: 0, opacity: 1 },
-          "75%": { x: -180, y: -40, opacity: 0.8 },
-          "100%": { x: -240, y: 0, opacity: 0 },
+          "0%": { x: 50, y: 0, opacity: 1 },
+          "50%": { x: 10, y: -40, opacity: 1 },
+          "100%": { x: -30, y: -10, opacity: 1 },
           easeEach: "none",
         },
         duration: 2,
@@ -125,7 +124,7 @@ export default {
 
 <style>
 .fadeout {
-  animation: fadein-keyframes 1s ease 0s 1 forwards;
+  animation: fadein-keyframes 2.5s ease 0s 1 forwards;
 }
 
 @keyframes fadein-keyframes {
@@ -139,7 +138,7 @@ export default {
 
 .poncounterimg {
   margin-top: 30vh;
-  margin-left: 5vw;
+  /* margin-left: 5vw; */
   position: absolute;
   z-index: 999;
 }
