@@ -47,7 +47,7 @@ export default {
     // 疎通確認
     this.checkStreaming = setInterval(() => {
       this.checkLive();
-    }, 5000);
+    }, 1500);
   },
   methods: {
     async checkLive() {
@@ -153,25 +153,23 @@ export default {
           }
         } else if (Object.keys(getJson).length === 12) {
           // ギフトログ
-          if (document.hasFocus()) {
-            if (getJson.gt == 2) {
-              // 投票
-              if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
-              } else if (getJson.g == 1601) {
-                // 虹星
-                this.fallGift(getJson);
-              } else {
-                // 無料
-                if (this.fallFlg) {
-                  this.fallGiftFree(getJson);
-                }
-                // 3周カウント
-                this.addFreeGift(getJson);
-              }
-            } else {
-              // 有料
+          if (getJson.gt == 2) {
+            // 投票
+            if (Number(getJson.g) > 10000 && Number(getJson.g) <= 10070) {
+            } else if (getJson.g == 1601) {
+              // 虹星
               this.fallGift(getJson);
+            } else {
+              // 無料
+              if (this.fallFlg) {
+                this.fallGiftFree(getJson);
+              }
+              // 3周カウント
+              this.addFreeGift(getJson);
             }
+          } else {
+            // 有料
+            this.fallGift(getJson);
           }
 
           // this.fallGift(getJson);
@@ -247,10 +245,10 @@ export default {
       }
       // 拍手
       if (commentObj.cm == "88888888" || commentObj.cm == "８８８８８８８８") {
-        this.fallAther(commentObj.u, "8_0", 50, 100);
-        this.fallAther(commentObj.u, "8_1", 25, 50);
-        this.fallAther(commentObj.u, "8_2", 25, 50);
-        this.fallAther(commentObj.u, "8_3", 25, 50);
+        this.fallAther(commentObj.u, "8_0", 25, 100);
+        this.fallAther(commentObj.u, "8_1", 10, 50);
+        this.fallAther(commentObj.u, "8_2", 10, 50);
+        this.fallAther(commentObj.u, "8_3", 10, 50);
       }
       // きゅうり
       if (
@@ -471,12 +469,12 @@ export default {
       if (this.freeGiftList.some((e) => e.id == giftObj.u)) {
         for (let i in this.freeGiftList) {
           if (this.freeGiftList[i].id === giftObj.u) {
-            this.freeGiftList[i].num += giftObj.n;
+            this.freeGiftList[i].num += Number(giftObj.n);
             this.freeGiftList[i].gitId = giftObj.g;
             this.freeGiftList[i].name = giftObj.ac;
             this.freeGiftList[i].avatar = giftObj.av;
             // 3周(本来は1435)
-            if (this.freeGiftList[i].num >= 1430) {
+            if (this.freeGiftList[i].num >= 1300) {
               this.kasoCounter(this.freeGiftList[i]);
             }
           }
@@ -486,7 +484,7 @@ export default {
           id: giftObj.u,
           name: giftObj.ac,
           gitId: giftObj.g,
-          num: giftObj.n,
+          num: Number(giftObj.n),
           flg: giftObj.ua,
           avatar: giftObj.av,
         });
