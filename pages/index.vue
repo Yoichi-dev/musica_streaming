@@ -3,6 +3,7 @@
     <Counter :pon="pon" />
     <Time v-if="showFlg" :startTime="startTime" />
     <Comment :commentData="commentData" />
+    <Kaso :sansyuCount="sansyuCount" />
     <!-- <Telop :telop="telop" /> -->
   </div>
 </template>
@@ -18,6 +19,7 @@ export default {
       telop: "",
       commentData: [],
       giftData: [],
+      freeGiftList: [],
       streamData: null,
       socket: null,
       checkStreaming: null,
@@ -25,6 +27,8 @@ export default {
       showFlg: true,
       fallFlg: false,
       pon: 0,
+      sansyu: [],
+      sansyuCount: 0,
     };
   },
   head() {
@@ -161,6 +165,8 @@ export default {
                 if (this.fallFlg) {
                   this.fallGiftFree(getJson);
                 }
+                // 3周カウント
+                this.addFreeGift(getJson);
               }
             } else {
               // 有料
@@ -459,6 +465,41 @@ export default {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.random() * (max - min + 1) + min;
+    },
+    addFreeGift(giftObj) {
+      // 既に存在するか確認
+      if (this.freeGiftList.some((e) => e.id == giftObj.u)) {
+        for (let i in this.freeGiftList) {
+          if (this.freeGiftList[i].id === giftObj.u) {
+            this.freeGiftList[i].num += giftObj.n;
+            this.freeGiftList[i].gitId = giftObj.g;
+            this.freeGiftList[i].name = giftObj.ac;
+            this.freeGiftList[i].avatar = giftObj.av;
+            // 3周(本来は1435)
+            if (this.freeGiftList[i].num >= 1430) {
+              this.kasoCounter(this.freeGiftList[i]);
+            }
+          }
+        }
+      } else {
+        this.freeGiftList.unshift({
+          id: giftObj.u,
+          name: giftObj.ac,
+          gitId: giftObj.g,
+          num: giftObj.n,
+          flg: giftObj.ua,
+          avatar: giftObj.av,
+        });
+      }
+    },
+    kasoCounter(userData) {
+      if (this.sansyu.indexOf(userData.id) == -1) {
+        this.sansyu.push(userData.id);
+        // 3周カウント
+        if (this.sansyuCount < 20) {
+          this.sansyuCount++;
+        }
+      }
     },
   },
 };
