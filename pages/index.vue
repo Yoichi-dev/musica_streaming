@@ -474,7 +474,10 @@ export default {
             this.freeGiftList[i].name = giftObj.ac;
             this.freeGiftList[i].avatar = giftObj.av;
             // 3周(本来は1435)
-            if (this.freeGiftList[i].num >= 1300) {
+            if (this.freeGiftList[i].num > 1240) {
+              console.log(
+                `${this.freeGiftList[i].name}:${this.freeGiftList[i].num}pt`
+              );
               this.kasoCounter(this.freeGiftList[i]);
             }
           }
