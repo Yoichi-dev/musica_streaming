@@ -27,7 +27,6 @@ export default {
       showFlg: true,
       fallFlg: false,
       pon: 0,
-      sansyu: [],
       sansyuCount: 0,
     };
   },
@@ -47,7 +46,7 @@ export default {
     // 疎通確認
     this.checkStreaming = setInterval(() => {
       this.checkLive();
-    }, 1500);
+    }, 5000);
   },
   methods: {
     async checkLive() {
@@ -117,6 +116,7 @@ export default {
       setInterval(() => {
         this.socket.send("PING\tshowroom");
         this.fallFlg = true;
+        this.getRanking();
       }, 60000);
       // メッセージ受信
       this.socket.onmessage = (data) => {
@@ -164,8 +164,6 @@ export default {
               if (this.fallFlg) {
                 this.fallGiftFree(getJson);
               }
-              // 3周カウント
-              this.addFreeGift(getJson);
             }
           } else {
             // 有料
@@ -464,35 +462,6 @@ export default {
       max = Math.floor(max);
       return Math.random() * (max - min + 1) + min;
     },
-    addFreeGift(giftObj) {
-      // 既に存在するか確認
-      if (this.freeGiftList.some((e) => e.id == giftObj.u)) {
-        for (let i in this.freeGiftList) {
-          if (this.freeGiftList[i].id === giftObj.u) {
-            this.freeGiftList[i].num += Number(giftObj.n);
-            this.freeGiftList[i].gitId = giftObj.g;
-            this.freeGiftList[i].name = giftObj.ac;
-            this.freeGiftList[i].avatar = giftObj.av;
-            // 3周(本来は1435)
-            if (this.freeGiftList[i].num > 1240) {
-              console.log(
-                `${this.freeGiftList[i].name}:${this.freeGiftList[i].num}pt`
-              );
-              this.kasoCounter(this.freeGiftList[i]);
-            }
-          }
-        }
-      } else {
-        this.freeGiftList.unshift({
-          id: giftObj.u,
-          name: giftObj.ac,
-          gitId: giftObj.g,
-          num: Number(giftObj.n),
-          flg: giftObj.ua,
-          avatar: giftObj.av,
-        });
-      }
-    },
     kasoCounter(userData) {
       if (this.sansyu.indexOf(userData.id) == -1) {
         this.sansyu.push(userData.id);
@@ -501,6 +470,19 @@ export default {
           this.sansyuCount++;
         }
       }
+    },
+    getRanking() {
+      axios
+        .get(`${process.env.API_URL}/api/live/ranking-point/PianistMusica`)
+        .then((response) => {
+          let sansyu = 0;
+          for (let i = 0; i < response.data.length; i++) {
+            if (sansyu < 20 && response.data[i].point >= 1730) {
+              sansyu++;
+            }
+          }
+          this.sansyuCount = sansyu;
+        });
     },
   },
 };

@@ -22,7 +22,7 @@ export default {
 <style scoped>
 #counter {
   float: right;
-  margin-top: 5vh;
+  margin-top: 10vh;
   margin-right: 10px;
   position: relative;
   color: rgba(0, 0, 0, 0);
