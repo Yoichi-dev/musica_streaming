@@ -3,7 +3,7 @@
     <Counter :pon="pon" />
     <Time v-if="showFlg" :startTime="startTime" />
     <Comment :commentData="commentData" />
-    <Kaso :sansyuCount="sansyuCount" />
+    <Kaso v-if="kasoFlg" :sansyuCount="sansyuCount" />
     <!-- <Telop :telop="telop" /> -->
   </div>
 </template>
@@ -28,6 +28,7 @@ export default {
       fallFlg: false,
       pon: 0,
       sansyuCount: 0,
+      kasoFlg: false,
     };
   },
   head() {
@@ -42,6 +43,9 @@ export default {
     }
     if (this.$route.query.watch != undefined) {
       this.showFlg = false;
+    }
+    if (this.$route.query.counter != undefined) {
+      this.kasoFlg = true;
     }
     // 疎通確認
     this.checkStreaming = setInterval(() => {
@@ -116,7 +120,9 @@ export default {
       setInterval(() => {
         this.socket.send("PING\tshowroom");
         this.fallFlg = true;
-        this.getRanking();
+        if (this.kasoFlg) {
+          this.getRanking();
+        }
       }, 60000);
       // メッセージ受信
       this.socket.onmessage = (data) => {
