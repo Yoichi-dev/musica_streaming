@@ -35,6 +35,11 @@
       <img width="1px" :src="require('@/assets/image/8_0.png')" />
       <img width="1px" :src="require('@/assets/image/musica.png')" />
       <img width="1px" :src="require('@/assets/image/kubi.png')" />
+      <img width="1px" :src="require('@/assets/image/maguro.png')" />
+      <img width="1px" :src="require('@/assets/image/kyuri.png')" />
+      <img width="1px" :src="require('@/assets/image/higase.png')" />
+      <img width="1px" :src="require('@/assets/image/kp.png')" />
+      <img width="1px" :src="require('@/assets/image/kubi.gif')" />
     </div>
   </div>
 </template>
@@ -49,6 +54,104 @@ export default {
   },
   methods: {
     addComment(comment) {
+      // ぽん
+      if (
+        comment.comment == "ぽん" ||
+        comment.comment == "ポン" ||
+        comment.comment == "ぽん！" ||
+        comment.comment == "ポン！"
+      ) {
+        this.createElement(comment, "200", "pon.png");
+      } else if (comment.comment == "ぽん.") {
+        this.createElement(comment, "200", "pon_bk.png");
+      } else if (
+        comment.comment == "シカ" ||
+        comment.comment == "しか" ||
+        comment.comment == "鹿"
+      ) {
+        this.createElement(comment, "200", "sika.png");
+      } else if (
+        comment.comment == "シカ." ||
+        comment.comment == "しか." ||
+        comment.comment == "鹿."
+      ) {
+        this.createElement(comment, "200", "higase.png");
+      } else if (
+        comment.comment == "クマ" ||
+        comment.comment == "くま" ||
+        comment.comment == "熊"
+      ) {
+        this.createElement(comment, "125", "8.png");
+      } else if (
+        comment.comment == "ネコ" ||
+        comment.comment == "ねこ" ||
+        comment.comment == "猫"
+      ) {
+        this.createElement(comment, "200", "neko.png");
+      } else if (
+        comment.comment == "88888888" ||
+        comment.comment == "８８８８８８８８" ||
+        comment.comment == "はち" ||
+        comment.comment == "ハチ" ||
+        comment.comment == "蜂"
+      ) {
+        this.createElement(comment, "200", "8_0.png");
+      } else if (
+        comment.comment == "つな" ||
+        comment.comment == "ツナ" ||
+        comment.comment == "ツナ缶"
+      ) {
+        this.createElement(comment, "200", "tuna.png");
+      } else if (comment.comment == "つな." || comment.comment == "ツナ.") {
+        this.createElement(comment, "200", "fish.png");
+      } else if (
+        comment.comment == "出陣" ||
+        comment.comment == "ほら貝" ||
+        comment.comment == "法螺貝" ||
+        comment.comment == "ホラ貝"
+      ) {
+        this.createElement(comment, "200", "hora.png");
+      } else if (
+        comment.comment == "生首" ||
+        comment.comment == "くび" ||
+        comment.comment == "なまくび" ||
+        comment.comment == "クビ"
+      ) {
+        this.createElement(comment, "200", "kubi.png");
+      } else if (
+        comment.comment == "生首." ||
+        comment.comment == "くび." ||
+        comment.comment == "なまくび." ||
+        comment.comment == "クビ."
+      ) {
+        this.createElement(comment, "200", "kubi.gif");
+      } else if (
+        comment.comment == "マグロときゅうりの女" ||
+        comment.comment == "マグロときゅうり"
+      ) {
+        this.createElement(comment, "200", "maguro.png");
+      } else if (
+        comment.comment == "ゴールデンムジカ" ||
+        comment.comment == "ごーるでんむじか"
+      ) {
+        this.createElement(comment, "200", "gold.png");
+      } else if (comment.comment == "KP.") {
+        this.createElement(comment, "200", "kp.png");
+      } else if (
+        comment.comment == "きゅうり" ||
+        comment.comment == "キュウリ"
+      ) {
+        this.createElement(comment, "200", "kyuri.png");
+      } else if (
+        comment.comment == "きゅうり." ||
+        comment.comment == "キュウリ."
+      ) {
+        this.createElement(comment, "200", "baribari.png");
+      } else {
+        this.createElement(comment, "none", "");
+      }
+    },
+    createElement(comment, width, img) {
       let element1 = document.createElement("div");
       element1.classList.add("slidein");
       element1.classList.add("kaiwa");
@@ -67,155 +170,19 @@ export default {
       giftImgElement.classList.add("jump");
       giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
 
-      // ぽん
-      if (
-        comment.comment == "ぽん" ||
-        comment.comment == "ポン" ||
-        comment.comment == "ぽん！" ||
-        comment.comment == "ポン！"
-      ) {
-        element3.classList.add("stamp");
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/pon.png");
+      if (width === "none") {
+        element3.textContent = comment.comment;
         element1.append(element2);
         element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (comment.comment == "ぽん.") {
-        element3.classList.add("stamp");
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/pon_bk.png");
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "シカ" ||
-        comment.comment == "しか" ||
-        comment.comment == "鹿"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/sika.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "クマ" ||
-        comment.comment == "くま" ||
-        comment.comment == "熊"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "125";
-        stampElement.src = require("@/assets/image/8.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "ネコ" ||
-        comment.comment == "ねこ" ||
-        comment.comment == "猫"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/neko.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "88888888" ||
-        comment.comment == "８８８８８８８８" ||
-        comment.comment == "はち" ||
-        comment.comment == "ハチ" ||
-        comment.comment == "蜂"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/8_0.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "つな" ||
-        comment.comment == "ツナ" ||
-        comment.comment == "ツナ缶"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/tuna.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (comment.comment == "つな." || comment.comment == "ツナ.") {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/fish.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "出陣" ||
-        comment.comment == "ほら貝" ||
-        comment.comment == "法螺貝" ||
-        comment.comment == "ホラ貝"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/hora.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
-        element3.append(giftImgElement);
-      } else if (
-        comment.comment == "生首" ||
-        comment.comment == "くび" ||
-        comment.comment == "なまくび" ||
-        comment.comment == "クビ"
-      ) {
-        element3.classList.add("stamp");
-
-        let stampElement = document.createElement("img");
-        stampElement.width = "200";
-        stampElement.src = require("@/assets/image/kubi.png");
-
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(stampElement);
         element3.append(giftImgElement);
       } else {
-        element3.textContent = comment.comment;
-
+        element3.classList.add("stamp");
+        let stampElement = document.createElement("img");
+        stampElement.width = width;
+        stampElement.src = require(`@/assets/image/${img}`);
         element1.append(element2);
         element1.append(element3);
+        element3.append(stampElement);
         element3.append(giftImgElement);
       }
 
