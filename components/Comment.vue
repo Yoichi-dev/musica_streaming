@@ -54,101 +54,247 @@ export default {
   },
   methods: {
     addComment(comment) {
-      // ぽん
-      if (
-        comment.comment == "ぽん" ||
-        comment.comment == "ポン" ||
-        comment.comment == "ぽん！" ||
-        comment.comment == "ポン！"
-      ) {
-        this.createElement(comment, "200", "pon.png");
-      } else if (comment.comment == "ぽん.") {
-        this.createElement(comment, "200", "pon_bk.png");
-      } else if (
-        comment.comment == "シカ" ||
-        comment.comment == "しか" ||
-        comment.comment == "鹿"
-      ) {
-        this.createElement(comment, "200", "sika.png");
-      } else if (
-        comment.comment == "シカ." ||
-        comment.comment == "しか." ||
-        comment.comment == "鹿."
-      ) {
-        this.createElement(comment, "200", "higase.png");
-      } else if (
-        comment.comment == "クマ" ||
-        comment.comment == "くま" ||
-        comment.comment == "熊"
-      ) {
-        this.createElement(comment, "125", "8.png");
-      } else if (
-        comment.comment == "ネコ" ||
-        comment.comment == "ねこ" ||
-        comment.comment == "猫"
-      ) {
-        this.createElement(comment, "200", "neko.png");
-      } else if (
-        comment.comment == "88888888" ||
-        comment.comment == "８８８８８８８８" ||
-        comment.comment == "はち" ||
-        comment.comment == "ハチ" ||
-        comment.comment == "蜂"
-      ) {
-        this.createElement(comment, "200", "8_0.png");
-      } else if (
-        comment.comment == "つな" ||
-        comment.comment == "ツナ" ||
-        comment.comment == "ツナ缶"
-      ) {
-        this.createElement(comment, "200", "tuna.png");
-      } else if (comment.comment == "つな." || comment.comment == "ツナ.") {
-        this.createElement(comment, "200", "fish.png");
-      } else if (
-        comment.comment == "出陣" ||
-        comment.comment == "ほら貝" ||
-        comment.comment == "法螺貝" ||
-        comment.comment == "ホラ貝"
-      ) {
-        this.createElement(comment, "200", "hora.png");
-      } else if (
-        comment.comment == "生首" ||
-        comment.comment == "くび" ||
-        comment.comment == "なまくび" ||
-        comment.comment == "クビ"
-      ) {
-        this.createElement(comment, "200", "kubi.png");
-      } else if (
-        comment.comment == "生首." ||
-        comment.comment == "くび." ||
-        comment.comment == "なまくび." ||
-        comment.comment == "クビ."
-      ) {
-        this.createElement(comment, "200", "kubi.gif");
-      } else if (
-        comment.comment == "マグロときゅうりの女" ||
-        comment.comment == "マグロときゅうり"
-      ) {
-        this.createElement(comment, "200", "maguro.png");
-      } else if (
-        comment.comment == "ゴールデンムジカ" ||
-        comment.comment == "ごーるでんむじか"
-      ) {
-        this.createElement(comment, "200", "gold.png");
-      } else if (comment.comment == "KP.") {
-        this.createElement(comment, "200", "kp.png");
-      } else if (
-        comment.comment == "きゅうり" ||
-        comment.comment == "キュウリ"
-      ) {
-        this.createElement(comment, "200", "kyuri.png");
-      } else if (
-        comment.comment == "きゅうり." ||
-        comment.comment == "キュウリ."
-      ) {
-        this.createElement(comment, "200", "baribari.png");
-      } else {
-        this.createElement(comment, "none", "");
+      switch (comment.comment) {
+        case "ぽん":
+        case "ポン":
+        case "ぽん！":
+        case "ポン！":
+          this.createElement(comment, "200", "pon.png");
+          break;
+        case "ぽん.":
+          this.createElement(comment, "200", "pon_bk.png");
+          break;
+        case "シカ":
+        case "しか":
+        case "鹿":
+          this.createElement(comment, "200", "sika.png");
+          break;
+        case "シカ.":
+        case "しか.":
+        case "鹿.":
+          this.createElement(comment, "200", "higase.png");
+          break;
+        case "クマ":
+        case "くま":
+        case "熊":
+          this.createElement(comment, "125", "8.png");
+          break;
+        case "ネコ":
+        case "ねこ":
+        case "猫":
+          this.createElement(comment, "200", "neko.png");
+          break;
+        case "88888888":
+        case "８８８８８８８８":
+        case "はち":
+        case "ハチ":
+        case "蜂":
+          this.createElement(comment, "200", "8_0.png");
+          break;
+        case "つな":
+        case "ツナ":
+        case "ツナ缶":
+          this.createElement(comment, "200", "tuna.png");
+          break;
+        case "つな.":
+        case "ツナ.":
+          this.createElement(comment, "200", "fish.png");
+          break;
+        case "出陣":
+        case "ほら貝":
+        case "法螺貝":
+        case "ホラ貝":
+          this.createElement(comment, "200", "hora.png");
+          break;
+        case "生首":
+        case "くび":
+        case "なまくび":
+        case "クビ":
+          this.createElement(comment, "200", "kubi.png");
+          break;
+        case "生首.":
+        case "くび.":
+        case "なまくび.":
+        case "クビ.":
+          this.createElement(comment, "200", "kubi.gif");
+          break;
+        case "マグロときゅうりの女":
+        case "マグロときゅうり":
+          this.createElement(comment, "200", "maguro.png");
+          break;
+        case "ゴールデンムジカ":
+        case "ごーるでんむじか":
+          this.createElement(comment, "200", "gold.png");
+          break;
+        case "KP.":
+        case "kp.":
+          this.createElement(comment, "200", "kp.png");
+          break;
+        case "きゅうり":
+        case "キュウリ":
+          this.createElement(comment, "200", "kyuri.png");
+          break;
+        case "きゅうり.":
+        case "キュウリ.":
+          this.createElement(comment, "200", "baribari.png");
+          break;
+        case "カツオ":
+        case "鰹":
+          this.createElement(comment, "200", "sushi/sushi_katsuo.png");
+          break;
+        case "カツオ.":
+        case "鰹.":
+          this.createElement(comment, "200", "sushi/sashimi_katsuo_tataki.png");
+          break;
+        case "サーモン":
+          this.createElement(comment, "200", "sushi/sushi_salmon.png");
+          break;
+        case "サーモン.":
+          this.createElement(comment, "200", "sushi/sashimi_salmon.png");
+          break;
+        case "ねぎとろ軍艦":
+        case "ねぎとろ":
+          this.createElement(comment, "200", "sushi/sushi_negitoro.png");
+          break;
+        case "大トロ":
+          this.createElement(comment, "200", "sushi/sushi_ootoro.png");
+          break;
+        case "大トロ.":
+          this.createElement(comment, "200", "sushi/sashimi_maguro_ootoro.png");
+          break;
+        case "タイ":
+        case "鯛":
+          this.createElement(comment, "200", "sushi/sushi_tai.png");
+          break;
+        case "タイ.":
+        case "鯛.":
+          this.createElement(comment, "200", "sushi/sashimi_tai.png");
+          break;
+        case "ガリ":
+          this.createElement(comment, "200", "sushi/gari.png");
+          break;
+        case "ウニの軍艦":
+        case "ウニ軍艦":
+          this.createElement(comment, "200", "sushi/sushi_uni2.png");
+          break;
+        case "いなり寿司":
+        case "いなり":
+          this.createElement(comment, "200", "sushi/inarizushi.png");
+          break;
+        case "玉子":
+          this.createElement(comment, "200", "sushi/sushi_tamago.png");
+          break;
+        case "かっぱ巻き":
+          this.createElement(comment, "200", "sushi/makimono_kappa.png");
+          break;
+        case "海老":
+        case "エビ":
+          this.createElement(comment, "200", "sushi/sushi_ebi.png");
+          break;
+        case "かんぴょう巻き":
+        case "かんぴょう":
+          this.createElement(comment, "200", "sushi/makimono_kanpyo.png");
+          break;
+        case "えんがわ":
+          this.createElement(comment, "200", "sushi/sushi_engawa.png");
+          break;
+        case "ネギトロ":
+          this.createElement(comment, "200", "sushi/makimono_negitoro.png");
+          break;
+        case "ホタテ":
+          this.createElement(comment, "200", "sushi/sushi_hotate.png");
+          break;
+        case "イクラ":
+          this.createElement(comment, "200", "sushi/sushi_ikura.png");
+          break;
+        case "イカ":
+          this.createElement(comment, "200", "sushi/sushi_ika.png");
+          break;
+        case "イカ.":
+          this.createElement(comment, "200", "sushi/sashimi_ika.png");
+          break;
+        case "鉄火巻き":
+          this.createElement(comment, "200", "sushi/makimono_tekkamaki.png");
+          break;
+        case "イワシ":
+        case "鰯":
+          this.createElement(comment, "200", "sushi/sushi_iwashi.png");
+          break;
+        case "赤貝":
+          this.createElement(comment, "200", "sushi/sushi_akagai.png");
+          break;
+        case "数の子":
+          this.createElement(comment, "200", "sushi/sushi_kazunoko.png");
+          break;
+        case "マグロ":
+        case "鮪":
+          this.createElement(comment, "200", "sushi/sushi_akami.png");
+          break;
+        case "マグロ.":
+        case "鮪.":
+          this.createElement(comment, "200", "sushi/sashimi_maguro_akami.png");
+          break;
+        case "甘エビ":
+          this.createElement(comment, "200", "sushi/sushi_amaebi.png");
+          break;
+        case "こはだ":
+        case "小鰭":
+          this.createElement(comment, "200", "sushi/sushi_kohada.png");
+          break;
+        case "バッテラ":
+        case "鯖寿司":
+          this.createElement(comment, "200", "sushi/sushi_battera.png");
+          break;
+        case "ブリ":
+        case "鰤":
+          this.createElement(comment, "200", "sushi/sushi_buri.png");
+          break;
+        case "ブリ.":
+        case "鰤.":
+          this.createElement(comment, "200", "sushi/sashimi_buri.png");
+          break;
+        case "アナゴ":
+        case "穴子":
+          this.createElement(comment, "200", "sushi/sushi_anago.png");
+          break;
+        case "中トロ":
+          this.createElement(comment, "200", "sushi/sushi_chutoro.png");
+          break;
+        case "中トロ.":
+          this.createElement(
+            comment,
+            "200",
+            "sushi/sashimi_maguro_chutoro.png"
+          );
+          break;
+        case "ツナの軍艦":
+        case "ツナ軍艦":
+          this.createElement(comment, "200", "sushi/sushi_tsuna.png");
+          break;
+        case "ハマチ":
+        case "魬":
+          this.createElement(comment, "200", "sushi/sushi_hamachi.png");
+          break;
+        case "ハマチ.":
+        case "魬.":
+          this.createElement(comment, "200", "sushi/sashimi_hamachi.png");
+          break;
+        case "タコ":
+        case "蛸":
+          this.createElement(comment, "200", "sushi/sushi_tako.png");
+          break;
+        case "タコ.":
+        case "蛸.":
+          this.createElement(comment, "200", "sushi/sashimi_tako.png");
+          break;
+        case "カンパチ":
+          this.createElement(comment, "200", "sushi/sashimi_kanpachi.png");
+          break;
+        case "アジ":
+          this.createElement(comment, "200", "sushi/sashimi_aji.png");
+          break;
+        default:
+          this.createElement(comment, "none", "");
       }
     },
     createElement(comment, width, img) {
