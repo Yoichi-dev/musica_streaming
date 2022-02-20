@@ -293,6 +293,9 @@ export default {
         case "アジ":
           this.createElement(comment, "200", "sushi/sashimi_aji.png");
           break;
+        case "プリン":
+          this.createElement(comment, "200", "sushi/sweets_purin.png");
+          break;
         default:
           this.createElement(comment, "none", "");
       }
