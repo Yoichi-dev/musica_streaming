@@ -280,6 +280,10 @@ export default {
       ) {
         this.fallAther(commentObj.u, "kubi", 25, 100);
       }
+      // むじかりこ
+      if (commentObj.cm == "むじかりこ") {
+        this.fallAther(commentObj.u, "jagarico-icon", 25, 100);
+      }
     },
     fallGiftFree(gift) {
       // 画面幅を取得

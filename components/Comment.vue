@@ -122,6 +122,10 @@ export default {
         case "マグロときゅうり":
           this.createElement(comment, "200", "maguro.png");
           break;
+        case "マグロときゅうりの女.":
+        case "マグロときゅうり.":
+          this.createElement(comment, "200", "maguro2.png");
+          break;
         case "ゴールデンムジカ":
         case "ごーるでんむじか":
           this.createElement(comment, "200", "gold.png");
@@ -295,6 +299,14 @@ export default {
           break;
         case "プリン":
           this.createElement(comment, "200", "sushi/sweets_purin.png");
+          break;
+        case "むじかりこ":
+          this.createElement(comment, "200", "jagarico.png");
+          break;
+        case "鳩に豆鉄砲":
+        case "ハト":
+        case "鳩":
+          this.createElement(comment, "200", "hato.png");
           break;
         default:
           this.createElement(comment, "none", "");
