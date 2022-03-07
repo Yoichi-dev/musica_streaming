@@ -308,6 +308,12 @@ export default {
         case "鳩":
           this.createElement(comment, "200", "hato.png");
           break;
+        case "確定申告":
+          this.createElement(comment, "200", "zei_kakuteishinkoku.png");
+          break;
+        case "源泉徴収票":
+          this.createElement(comment, "200", "document_gensen_chousyuhyou.png");
+          break;
         default:
           this.createElement(comment, "none", "");
       }
