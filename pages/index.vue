@@ -15,8 +15,8 @@ import { gsap } from "gsap";
 export default {
   data() {
     return {
-      roomId: "239199",
-      roomUrl: "/9c9f13107340",
+      roomId: "373889",
+      roomUrl: "/PianistMusica",
       ws: "wss://online.showroom-live.com",
       telop: "",
       commentData: [],
