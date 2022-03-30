@@ -15,7 +15,9 @@ import { gsap } from "gsap";
 export default {
   data() {
     return {
-      roomId: "373889",
+      roomId: "239199",
+      roomUrl: "/9c9f13107340",
+      ws: "wss://online.showroom-live.com",
       telop: "",
       commentData: [],
       giftData: [],
@@ -23,6 +25,7 @@ export default {
       streamData: null,
       socket: null,
       checkStreaming: null,
+      checkPing: null,
       startTime: null,
       showFlg: true,
       fallFlg: false,
@@ -48,9 +51,25 @@ export default {
       this.kasoFlg = true;
     }
     // 疎通確認
-    this.checkStreaming = setInterval(() => {
-      this.checkLive();
-    }, 5000);
+    // this.checkStreaming = setInterval(() => {
+    //   this.checkLive();
+    // }, 5000);
+    // ソケット接続
+    setTimeout(() => {
+      this.getApi(`${process.env.API_URL}/api/live/broadcast${this.roomUrl}`)
+        .then((res) => {
+          if (res.data.split(":").length === 2) {
+            // 配信中
+            this.checkLive();
+          } else {
+            this.prConnectSocket(res.data);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("エラーが発生しました");
+        });
+    }, 1000);
   },
   methods: {
     async checkLive() {
@@ -102,6 +121,50 @@ export default {
           this.title = response.data.room_name;
         });
     },
+    getApi(url) {
+      return axios.get(url);
+    },
+    prConnectSocket(broadcastKey) {
+      // 接続
+      const prSocket = new WebSocket(this.ws);
+      // 接続確認
+      prSocket.onopen = (e) => {
+        prSocket.send(`SUB\t${broadcastKey}`);
+      };
+      // エラー発生時
+      prSocket.onerror = (e) => {
+        prSocket.close();
+      };
+      // 疎通確認
+      this.checkPing = setInterval(() => {
+        prSocket.send("PING\tshowroom");
+      }, 60000);
+      // メッセージ受信
+      prSocket.onmessage = (data) => {
+        // 死活監視
+        if (data.data === "ACK\tshowroom") {
+          return;
+        }
+        // エラー
+        if (
+          data.data === "ERR" ||
+          data.data === "Could not decode a text frame as UTF-8."
+        ) {
+          return;
+        }
+        // JSON変換
+        const getJson = JSON.parse(
+          data.data.split(`MSG\t${this.broadcastKey}`)[1]
+        );
+
+        if (getJson.t === 104) {
+          prSocket.close();
+          clearInterval(this.checkPing);
+          // 配信開始
+          this.checkLive();
+        }
+      };
+    },
     connectSocket() {
       console.log("接続開始");
       // 接続
@@ -143,7 +206,7 @@ export default {
           data.data.split("MSG\t" + this.streamData.bcsvr_key)[1]
         );
 
-        if (Object.keys(getJson).length === 9) {
+        if (Object.keys(getJson).length === 10) {
           // コメントログ
           // カウント
           let commentFormat = getJson.cm.replace(/[０-９]/g, (s) => {
@@ -157,7 +220,7 @@ export default {
           } else {
             this.getComment(getJson);
           }
-        } else if (Object.keys(getJson).length === 12) {
+        } else if (Object.keys(getJson).length === 13) {
           // ギフトログ
           if (getJson.gt == 2) {
             // 投票
@@ -177,7 +240,7 @@ export default {
           }
 
           // this.fallGift(getJson);
-        } else if (Object.keys(getJson).length === 5) {
+        } else if (Object.keys(getJson).length === 6) {
           // テロップ
           this.telop = getJson.telop;
         } else if (Object.keys(getJson).length === 4) {

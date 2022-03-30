@@ -208,6 +208,7 @@ export default {
         case "ホタテ":
           this.createElement(comment, "200", "sushi/sushi_hotate.png");
           break;
+        case "いくら":
         case "イクラ":
           this.createElement(comment, "200", "sushi/sushi_ikura.png");
           break;
