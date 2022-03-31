@@ -193,9 +193,7 @@ export default {
           return;
         }
         // JSON変換
-        const getJson = JSON.parse(
-          data.data.split(`MSG\t${this.broadcastKey}`)[1]
-        );
+        const getJson = JSON.parse(data.data.split(`MSG\t${broadcastKey}`)[1]);
 
         if (getJson.t === 104) {
           prSocket.close();
