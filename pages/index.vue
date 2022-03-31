@@ -19,6 +19,7 @@ export default {
       roomUrl: "/PianistMusica",
       ws: "wss://online.showroom-live.com",
       telop: "",
+      bcsvr_key: "",
       commentData: [],
       giftData: [],
       freeGiftList: [],
@@ -50,17 +51,22 @@ export default {
     if (this.$route.query.counter != undefined) {
       this.kasoFlg = true;
     }
+
     // 疎通確認
     // this.checkStreaming = setInterval(() => {
     //   this.checkLive();
     // }, 5000);
+
     // ソケット接続
     setTimeout(() => {
       this.getApi(`${process.env.API_URL}/api/live/broadcast${this.roomUrl}`)
         .then((res) => {
-          if (res.data.split(":").length === 2) {
+          if (!Object.keys(res.data).length) {
+            this.premiumLive();
+          } else if (res.data.split(":").length === 2) {
             // 配信中
-            this.checkLive();
+            this.bcsvr_key = res.data;
+            this.normalLive();
           } else {
             this.prConnectSocket(res.data);
           }
@@ -72,6 +78,37 @@ export default {
     }, 1000);
   },
   methods: {
+    async normalLive() {
+      await axios
+        .get(`${process.env.API_URL}/api/users/${this.roomId}`)
+        .then((response) => {
+          if (response.data.is_onlive) {
+            this.startTime = response.data.current_live_started_at;
+            // 配信情報取得
+            this.getLiveData();
+            // 接続
+            this.connectSocket();
+          }
+        });
+    },
+    premiumLive() {
+      this.checkStreaming = setInterval(() => {
+        axios
+          .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
+          .then((response) => {
+            if (response.data.length != undefined) {
+              if (response.data) {
+                console.log(response.data);
+                this.bcsvr_key = response.data[0].bcsvr_key;
+                this.streamData = response.data[0];
+                clearInterval(this.checkStreaming);
+                // 接続
+                this.connectSocket();
+              }
+            }
+          });
+      }, 5000);
+    },
     async checkLive() {
       let flg = false;
       let preFlg = false;
@@ -85,7 +122,7 @@ export default {
               preFlg = true;
             } else {
               flg = true;
-              clearInterval(this.checkStreaming);
+              // clearInterval(this.checkStreaming);
             }
             this.startTime = response.data.current_live_started_at;
           } else {
@@ -94,18 +131,20 @@ export default {
         });
 
       if (preFlg) {
-        await axios
-          .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
-          .then((response) => {
-            if (response.data.length != undefined) {
-              if (response.data) {
-                this.streamData = response.data[0];
-                clearInterval(this.checkStreaming);
-                // 接続
-                this.connectSocket();
+        this.checkStreaming = setInterval(() => {
+          axios
+            .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
+            .then((response) => {
+              if (response.data.length != undefined) {
+                if (response.data) {
+                  this.streamData = response.data[0];
+                  clearInterval(this.checkStreaming);
+                  // 接続
+                  this.connectSocket();
+                }
               }
-            }
-          });
+            });
+        }, 5000);
       } else if (flg) {
         // 配信情報取得
         await this.getLiveData();
@@ -134,6 +173,7 @@ export default {
       // エラー発生時
       prSocket.onerror = (e) => {
         prSocket.close();
+        location.reload();
       };
       // 疎通確認
       this.checkPing = setInterval(() => {
@@ -161,7 +201,7 @@ export default {
           prSocket.close();
           clearInterval(this.checkPing);
           // 配信開始
-          this.checkLive();
+          location.reload();
         }
       };
     },
@@ -171,7 +211,7 @@ export default {
       this.socket = new WebSocket("wss://online.showroom-live.com");
       // 接続確認
       this.socket.onopen = (e) => {
-        this.socket.send("SUB\t" + this.streamData.bcsvr_key);
+        this.socket.send("SUB\t" + this.bcsvr_key);
         console.log("コネクションを開始しました");
       };
       // エラー発生時
@@ -202,9 +242,7 @@ export default {
         }
 
         // JSON変換
-        let getJson = JSON.parse(
-          data.data.split("MSG\t" + this.streamData.bcsvr_key)[1]
-        );
+        let getJson = JSON.parse(data.data.split("MSG\t" + this.bcsvr_key)[1]);
 
         if (Object.keys(getJson).length === 10) {
           // コメントログ
