@@ -59,7 +59,9 @@ export default {
 
     // ソケット接続
     setTimeout(() => {
-      this.getApi(`${process.env.API_URL}/api/live/broadcast${this.roomUrl}`)
+      this.getApi(
+        `https://showroom-app-api.herokuapp.com/other/broadcast/PianistMusica`
+      )
         .then((res) => {
           if (!Object.keys(res.data).length) {
             this.premiumLive();
