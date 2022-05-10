@@ -1,7 +1,7 @@
 const constants = {
   url: {
-    main: "http://192.168.11.2:3001",
-    sub: "http://192.168.11.2:3001",
+    main: "https://showroom-app-api.herokuapp.com",
+    sub: "https://showroom-app-api.herokuapp.com",
     search: "other/search?keyword=",
     live: {
       onlives: "/live/onlives",
