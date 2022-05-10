@@ -11,6 +11,7 @@
 <script>
 import axios from "axios";
 import { gsap } from "gsap";
+import constants from "~/constants";
 
 export default {
   data() {
@@ -60,7 +61,7 @@ export default {
     // ソケット接続
     setTimeout(() => {
       this.getApi(
-        `https://showroom-app-api.herokuapp.com/other/broadcast/PianistMusica`
+        `${constants.url.main}${constants.url.other.broadcast}${this.roomUrl}`
       )
         .then((res) => {
           if (!Object.keys(res.data).length) {
@@ -75,14 +76,15 @@ export default {
         })
         .catch((e) => {
           console.log(e);
-          alert("エラーが発生しました");
+          console.log("プレミアム配信かも？");
+          this.premiumLive();
         });
     }, 1000);
   },
   methods: {
     async normalLive() {
       await axios
-        .get(`${process.env.API_URL}/api/users/${this.roomId}`)
+        .get(`${constants.url.main}${constants.url.room.profile}${this.roomId}`)
         .then((response) => {
           if (response.data.is_onlive) {
             this.startTime = response.data.current_live_started_at;
@@ -96,7 +98,7 @@ export default {
     premiumLive() {
       this.checkStreaming = setInterval(() => {
         axios
-          .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
+          .get(`${constants.url.main}${constants.url.live.premium}`)
           .then((response) => {
             if (response.data.length != undefined) {
               if (response.data) {
@@ -111,52 +113,54 @@ export default {
           });
       }, 5000);
     },
-    async checkLive() {
-      let flg = false;
-      let preFlg = false;
-      // 配信しているか確認
-      await axios
-        .get(`${process.env.API_URL}/api/users/${this.roomId}`)
-        .then((response) => {
-          if (response.data.is_onlive) {
-            // プレミアライブ中か？
-            if (response.data.premium_room_type == 1) {
-              preFlg = true;
-            } else {
-              flg = true;
-              // clearInterval(this.checkStreaming);
-            }
-            this.startTime = response.data.current_live_started_at;
-          } else {
-            console.log("配信停止中");
-          }
-        });
+    // async checkLive() {
+    //   let flg = false;
+    //   let preFlg = false;
+    //   // 配信しているか確認
+    //   await axios
+    //     .get(`${constants.url.main}${constants.url.room.profile}${this.roomId}`)
+    //     .then((response) => {
+    //       if (response.data.is_onlive) {
+    //         // プレミアライブ中か？
+    //         if (response.data.premium_room_type == 1) {
+    //           preFlg = true;
+    //         } else {
+    //           flg = true;
+    //           // clearInterval(this.checkStreaming);
+    //         }
+    //         this.startTime = response.data.current_live_started_at;
+    //       } else {
+    //         console.log("配信停止中");
+    //       }
+    //     });
 
-      if (preFlg) {
-        this.checkStreaming = setInterval(() => {
-          axios
-            .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
-            .then((response) => {
-              if (response.data.length != undefined) {
-                if (response.data) {
-                  this.streamData = response.data[0];
-                  clearInterval(this.checkStreaming);
-                  // 接続
-                  this.connectSocket();
-                }
-              }
-            });
-        }, 5000);
-      } else if (flg) {
-        // 配信情報取得
-        await this.getLiveData();
-        // 接続
-        this.connectSocket();
-      }
-    },
+    //   if (preFlg) {
+    //     this.checkStreaming = setInterval(() => {
+    //       axios
+    //         .get(`${process.env.API_URL}/api/users/onlive/${this.roomId}`)
+    //         .then((response) => {
+    //           if (response.data.length != undefined) {
+    //             if (response.data) {
+    //               this.streamData = response.data[0];
+    //               clearInterval(this.checkStreaming);
+    //               // 接続
+    //               this.connectSocket();
+    //             }
+    //           }
+    //         });
+    //     }, 5000);
+    //   } else if (flg) {
+    //     // 配信情報取得
+    //     await this.getLiveData();
+    //     // 接続
+    //     this.connectSocket();
+    //   }
+    // },
     async getLiveData() {
       await axios
-        .get(`${process.env.API_URL}/api/users/live/${this.roomId}`)
+        .get(
+          `${constants.url.main}${constants.url.live.liveInfo}${this.roomId}`
+        )
         .then((response) => {
           this.streamData = response.data;
           this.title = response.data.room_name;
@@ -208,7 +212,7 @@ export default {
     connectSocket() {
       console.log("接続開始");
       // 接続
-      this.socket = new WebSocket("wss://online.showroom-live.com");
+      this.socket = new WebSocket(constants.ws);
       // 接続確認
       this.socket.onopen = (e) => {
         this.socket.send("SUB\t" + this.bcsvr_key);
