@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 export default {
   ssr: false,
   target: 'static',
@@ -51,9 +49,6 @@ export default {
   },
   generate: {
     fallback: true
-  },
-  env: {
-    API_URL: process.env.API_URL
   },
   build: {
   }

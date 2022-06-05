@@ -20,7 +20,7 @@ export default {
       roomUrl: "/PianistMusica",
       ws: "wss://online.showroom-live.com",
       telop: "",
-      bcsvr_key: "",
+      bcsvr_key: "ee65de:Ld0eZLMr",
       commentData: [],
       giftData: [],
       freeGiftList: [],
@@ -68,7 +68,7 @@ export default {
             this.premiumLive();
           } else if (res.data.split(":").length === 2) {
             // 配信中
-            this.bcsvr_key = res.data;
+            this.bcsvr_key = "ee65de:Ld0eZLMr"; //res.data;
             this.normalLive();
           } else {
             this.prConnectSocket(res.data);
@@ -103,7 +103,7 @@ export default {
             if (response.data.length != undefined) {
               if (response.data) {
                 console.log(response.data);
-                this.bcsvr_key = response.data[0].bcsvr_key;
+                this.bcsvr_key = "ee65de:Ld0eZLMr";
                 this.streamData = response.data[0];
                 clearInterval(this.checkStreaming);
                 // 接続
@@ -404,13 +404,16 @@ export default {
         // 画像を設定
         if (i <= 9) {
           // giftImgElement.src = `~/assets/image/${i}.png`;
-          giftImgElement.src = require(`@/assets/image/${i}.png`);
-          giftImgElement.style.width = "50px";
+          giftImgElement.src = require(`@/assets/image/kusa.png`);
+          giftImgElement.style.width = "40px";
         } else if (i == 10) {
-          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
-          giftImgElement.style.width = "50px";
+          // giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
+          giftImgElement.src = require(`@/assets/image/daisougen.png`);
+          giftImgElement.style.width = "40px";
         } else {
-          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
+          // giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
+          giftImgElement.src = require(`@/assets/image/daisougen.png`);
+          giftImgElement.style.width = "40  px";
         }
 
         // IDを設定
@@ -626,17 +629,17 @@ export default {
       }
     },
     getRanking() {
-      axios
-        .get(`${process.env.API_URL}/api/live/ranking-point/PianistMusica`)
-        .then((response) => {
-          let sansyu = 0;
-          for (let i = 0; i < response.data.length; i++) {
-            if (sansyu < 20 && response.data[i].point >= 1730) {
-              sansyu++;
-            }
-          }
-          this.sansyuCount = sansyu;
-        });
+      // axios
+      //   .get(`${process.env.API_URL}/api/live/ranking-point/PianistMusica`)
+      //   .then((response) => {
+      //     let sansyu = 0;
+      //     for (let i = 0; i < response.data.length; i++) {
+      //       if (sansyu < 20 && response.data[i].point >= 1730) {
+      //         sansyu++;
+      //       }
+      //     }
+      //     this.sansyuCount = sansyu;
+      //   });
     },
   },
 };
