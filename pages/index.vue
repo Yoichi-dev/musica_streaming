@@ -404,16 +404,14 @@ export default {
         // 画像を設定
         if (i <= 9) {
           // giftImgElement.src = `~/assets/image/${i}.png`;
-          giftImgElement.src = require(`@/assets/image/kusa.png`);
-          giftImgElement.style.width = "40px";
+          giftImgElement.src = require(`@/assets/image/${i}.png`);
+          giftImgElement.style.width = "50px";
         } else if (i == 10) {
           // giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
-          giftImgElement.src = require(`@/assets/image/daisougen.png`);
-          giftImgElement.style.width = "40px";
+          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`;
+          giftImgElement.style.width = "50px";
         } else {
-          // giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
-          giftImgElement.src = require(`@/assets/image/daisougen.png`);
-          giftImgElement.style.width = "40  px";
+          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`;
         }
 
         // IDを設定
