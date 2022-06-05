@@ -20,7 +20,7 @@ export default {
       roomUrl: "/PianistMusica",
       ws: "wss://online.showroom-live.com",
       telop: "",
-      bcsvr_key: "ee65de:Ld0eZLMr",
+      bcsvr_key: "",
       commentData: [],
       giftData: [],
       freeGiftList: [],
@@ -68,7 +68,7 @@ export default {
             this.premiumLive();
           } else if (res.data.split(":").length === 2) {
             // 配信中
-            this.bcsvr_key = "ee65de:Ld0eZLMr"; //res.data;
+            this.bcsvr_key = res.data;
             this.normalLive();
           } else {
             this.prConnectSocket(res.data);
@@ -100,14 +100,15 @@ export default {
         axios
           .get(`${constants.url.main}${constants.url.live.premium}`)
           .then((response) => {
-            if (response.data.length != undefined) {
-              if (response.data) {
-                console.log(response.data);
-                this.bcsvr_key = "ee65de:Ld0eZLMr";
-                this.streamData = response.data[0];
-                clearInterval(this.checkStreaming);
-                // 接続
-                this.connectSocket();
+            if (response.data.length !== 0) {
+              for (let data of response.data) {
+                if (data.room_id === Number(this.roomId)) {
+                  this.bcsvr_key = data.bcsvr_key;
+                  this.streamData = data;
+                  clearInterval(this.checkStreaming);
+                  // 接続
+                  this.connectSocket();
+                }
               }
             }
           });
