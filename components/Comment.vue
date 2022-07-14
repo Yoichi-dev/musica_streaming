@@ -39,7 +39,7 @@
       <img width="1px" :src="require('@/assets/image/kyuri.png')" />
       <img width="1px" :src="require('@/assets/image/higase.png')" />
       <img width="1px" :src="require('@/assets/image/kp.png')" />
-      <img width="1px" :src="require('@/assets/image/kubi.gif')" />
+      <img width="1px" :src="require('@/assets/image/nasu.gif')" />
     </div>
   </div>
 </template>
@@ -141,6 +141,11 @@ export default {
         case "きゅうり.":
         case "キュウリ.":
           this.createElement(comment, "200", "baribari.png");
+          break;
+        case "なす":
+        case "ナス":
+        case "なすぅ…":
+          this.createElement(comment, "200", "nasu.png");
           break;
         case "カツオ":
         case "鰹":

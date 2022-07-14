@@ -377,6 +377,16 @@ export default {
         this.fallAther(commentObj.u, "cucumber4", 25, 100);
         this.fallAther(commentObj.u, "cucumber5", 25, 100);
       }
+      // なす
+      if (
+        commentObj.cm == "なすぅ…" ||
+        commentObj.cm == "🍆" ||
+        commentObj.cm == "なす" ||
+        commentObj.cm == "ナス"
+      ) {
+        this.fallAther(commentObj.u, "nasu", 25, 100);
+        this.fallAther(commentObj.u, "nasu1", 25, 100);
+      }
       // 生首
       if (
         commentObj.cm == "生首" ||
