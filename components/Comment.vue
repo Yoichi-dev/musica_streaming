@@ -39,7 +39,8 @@
       <img width="1px" :src="require('@/assets/image/kyuri.png')" />
       <img width="1px" :src="require('@/assets/image/higase.png')" />
       <img width="1px" :src="require('@/assets/image/kp.png')" />
-      <img width="1px" :src="require('@/assets/image/nasu.gif')" />
+      <img width="1px" :src="require('@/assets/image/kubi.gif')" />
+      <img width="1px" :src="require('@/assets/image/nasu.png')" />
     </div>
   </div>
 </template>
