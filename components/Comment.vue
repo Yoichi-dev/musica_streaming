@@ -342,7 +342,7 @@ export default {
       let giftImgElement = document.createElement("img");
       giftImgElement.classList.add("icon");
       giftImgElement.classList.add("jump");
-      giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${comment.avatar}.png?v=85`;
+      giftImgElement.src = comment.avatar;
 
       if (width === "none") {
         element3.textContent = comment.comment;

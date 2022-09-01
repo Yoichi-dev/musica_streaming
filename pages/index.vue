@@ -309,7 +309,7 @@ export default {
               name: commentObj.ac,
               comment: commentObj.cm,
               flg: commentObj.ua,
-              avatar: commentObj.av,
+              avatar: `https://image.showroom-cdn.com/showroom-prod/image/avatar/${commentObj.av}.png?v=85`,
             };
           }
         } else {
@@ -321,7 +321,7 @@ export default {
               name: commentObj.ac,
               comment: commentObj.cm,
               flg: commentObj.ua,
-              avatar: commentObj.av,
+              avatar: `https://image.showroom-cdn.com/showroom-prod/image/avatar/${commentObj.av}.png?v=85`,
             };
           }
         }
