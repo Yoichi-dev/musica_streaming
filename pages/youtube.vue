@@ -40,7 +40,7 @@ export default {
   mounted() {
     // 配信始まっているか確認
     let checkYoutube = setInterval(() => {
-      this.getApi("https://yoichiro-api-v1.site:61808/youtube/check?key=musica")
+      this.getApi("http://127.0.0.1:61808/youtube/check?key=musica")
         .then((res) => {
           console.log(res.data);
           if (res.data.streaming) {
@@ -64,7 +64,7 @@ export default {
       console.log("接続開始");
 
       // 接続
-      this.socket = new WebSocket("ws://minecraft.showroom-app.com:61809");
+      this.socket = new WebSocket("ws://127.0.0.1:61809");
       // 接続確認
       this.socket.onopen = (e) => {
         console.log("コネクションを開始しました");
