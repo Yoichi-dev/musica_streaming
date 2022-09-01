@@ -64,7 +64,7 @@ export default {
       console.log("接続開始");
 
       // 接続
-      this.socket = new WebSocket("ws://106.72.176.35:61809");
+      this.socket = new WebSocket("ws://minecraft.showroom-app.com:61809");
       // 接続確認
       this.socket.onopen = (e) => {
         console.log("コネクションを開始しました");
