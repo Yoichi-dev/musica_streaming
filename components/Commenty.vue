@@ -326,10 +326,17 @@ export default {
       giftImgElement.src = comment.avatar;
 
       if (width === "none") {
-        element3.textContent = comment.comment;
-        element1.append(element2);
-        element1.append(element3);
-        element3.append(giftImgElement);
+        if (comment.customEmoji) {
+          element3.innerHTML = comment.comment;
+          element1.append(element2);
+          element1.append(element3);
+          element3.append(giftImgElement);
+        } else {
+          element3.textContent = comment.comment;
+          element1.append(element2);
+          element1.append(element3);
+          element3.append(giftImgElement);
+        }
       } else {
         element3.classList.add("ystamp");
         let stampElement = document.createElement("img");
@@ -485,5 +492,9 @@ export default {
 
 .ykaiwa.yline .yleft + .yleft::after {
   content: none;
+}
+
+.customEmoji {
+  width: 50px;
 }
 </style>

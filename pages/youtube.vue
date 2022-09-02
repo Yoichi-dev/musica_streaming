@@ -85,13 +85,42 @@ export default {
       };
     },
     getComment(commentObj) {
+      let comment = "";
+      let customEmoji = false;
+
+      for (let i = 0; i < commentObj.message.length; i++) {
+        if ("text" in commentObj.message[i]) {
+          if (
+            commentObj.author.name === undefined ||
+            commentObj.message[i].text === undefined
+          ) {
+            return;
+          } else {
+            comment += commentObj.message[i].text;
+          }
+        } else if (commentObj.message[i].isCustomEmoji) {
+          // カスタム絵文字
+          comment += `<img src="${commentObj.message[i].url}" class="customEmoji">`;
+          customEmoji = commentObj.message[i].isCustomEmoji;
+          console.log(
+            `<img src="${commentObj.message[i].url}" class="customEmoji">`
+          );
+        } else if (!commentObj.message[i].isCustomEmoji) {
+          // 普通の絵文字
+          comment += commentObj.message[i].emojiText;
+        } else {
+          console.log(commentObj);
+        }
+      }
+
       this.commentData = {
         name: commentObj.author.name,
-        comment: commentObj.message[0].text,
+        comment: comment,
         avatar: commentObj.author.thumbnail.url,
+        customEmoji: customEmoji,
       };
       const cmId = Math.random().toString(32).substring(2);
-      const comment = commentObj.message[0].text;
+
       // ぽんエフェクト
       if (
         comment == "ぽん" ||
