@@ -68,46 +68,56 @@ export default {
     //   this.checkLive();
     // }, 5000);
 
+    this.connectSockety();
+
     // 配信始まっているか確認
     let checkYoutube = setInterval(() => {
-      this.getApi("http://127.0.0.1:61808/youtube/check?key=musica")
-        .then((res) => {
-          console.log(res.data);
-          if (res.data.streaming) {
-            console.log("配信中");
-            clearInterval(checkYoutube);
-            this.connectSockety();
-          } else {
-            console.log("配信無し");
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }, 5000);
-
-    // ソケット接続
-    setTimeout(() => {
       this.getApi(
         `${constants.url.main}${constants.url.other.broadcast}${this.roomUrl}`
       )
         .then((res) => {
           if (!Object.keys(res.data).length) {
+            clearInterval(checkYoutube);
             this.premiumLive();
           } else if (res.data.split(":").length === 2) {
             // 配信中
             this.bcsvr_key = res.data;
+            clearInterval(checkYoutube);
             this.normalLive();
           } else {
-            this.prConnectSocket(res.data);
+            console.log("未配信");
           }
         })
         .catch((e) => {
           console.log(e);
           console.log("プレミアム配信かも？");
+          clearInterval(checkYoutube);
           this.premiumLive();
         });
-    }, 1000);
+    }, 5000);
+
+    // ソケット接続
+    // setTimeout(() => {
+    //   this.getApi(
+    //     `${constants.url.main}${constants.url.other.broadcast}${this.roomUrl}`
+    //   )
+    //     .then((res) => {
+    //       if (!Object.keys(res.data).length) {
+    //         this.premiumLive();
+    //       } else if (res.data.split(":").length === 2) {
+    //         // 配信中
+    //         this.bcsvr_key = res.data;
+    //         this.normalLive();
+    //       } else {
+    //         this.prConnectSocket(res.data);
+    //       }
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       console.log("プレミアム配信かも？");
+    //       this.premiumLive();
+    //     });
+    // }, 1000);
   },
   methods: {
     async normalLive() {
@@ -328,10 +338,10 @@ export default {
       console.log("接続開始");
 
       // 接続
-      this.sockety = new WebSocket("ws://127.0.0.1:61809");
+      this.sockety = new WebSocket("wss://yoichiro-api-v1.site:61808/ws/");
       // 接続確認
       this.sockety.onopen = (e) => {
-        console.log("コネクションを開始しました");
+        console.log("yコネクションを開始しました");
       };
       // エラー発生時
       this.sockety.onerror = (error) => {
