@@ -347,6 +347,10 @@ export default {
       this.sockety.onerror = (error) => {
         location.reload();
       };
+      // close時
+      this.sockety.onclose = (error) => {
+        location.reload();
+      };
       // 疎通確認
       setInterval(() => {
         this.sockety.send("PING");
