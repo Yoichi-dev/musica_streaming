@@ -1,0 +1,522 @@
+<template>
+  <div id="gift" class="bgimg">
+    <img id="piano-logo" src="~/assets/image/logo.png" />
+    <Counter :pon="pon" />
+    <Comment class="pianoCommentArea scrollbar" :comment="commentData" />
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+import { gsap } from 'gsap'
+import constants from '~/constants'
+
+export default {
+  name: 'PianoPage',
+  data() {
+    return {
+      pon: 0,
+      commentData: {
+        id: null,
+        name: null,
+        comment: null,
+        flg: null,
+        avatar: null,
+        kbn: null,
+      },
+      srSocket: null,
+      roomStatus: null,
+      srSocketPing: null,
+      bcsvr_key: null,
+      fallFlg: false,
+    }
+  },
+  mounted() {
+    this.ytConnect()
+    axios
+      .get(
+        `${constants.url.main}${constants.url.other.status}${constants.roomUrl}`
+      )
+      .then((res) => {
+        this.roomStatus = res.data
+        this.bcsvr_key = res.data.broadcast_key
+        this.srConnect(res.data.broadcast_key)
+      })
+      .catch((e) => {
+        console.log('プレミアム配信かも？')
+        this.premiumLive()
+      })
+  },
+  methods: {
+    premiumLive() {
+      const checkStreaming = setInterval(() => {
+        axios
+          .get(`${constants.url.main}${constants.url.live.premium}`)
+          .then((response) => {
+            if (response.data.length !== 0) {
+              for (const data of response.data) {
+                if (data.room_id === constants.roomId) {
+                  this.bcsvr_key = data.bcsvr_key
+                  this.roomStatus = data
+                  clearInterval(checkStreaming)
+                  // 接続
+                  this.srConnect(data.bcsvr_key)
+                  break
+                }
+              }
+            }
+          })
+      }, 5000)
+    },
+    srConnect(bcsvrKey) {
+      // 接続
+      this.srSocket = new WebSocket(constants.ws)
+      // 接続確認
+      this.srSocket.onopen = (e) => {
+        console.log('接続')
+        this.srSocket.send(`SUB\t${bcsvrKey}`)
+      }
+      // 疎通確認
+      this.srSocketPing = setInterval(() => {
+        this.srSocket.send('PING\tshowroom')
+        this.fallFlg = true
+      }, 60000)
+      // エラー発生時
+      this.srSocket.onerror = (e) => {
+        this.srSocket.close()
+        clearInterval(this.srSocketPing)
+        // 再接続
+        this.srConnect(this.bcsvr_key)
+      }
+      // メッセージ受信
+      this.srSocket.onmessage = (data) => {
+        // 死活監視
+        if (
+          data.data === 'ACK\tshowroom' ||
+          data.data === 'Could not decode a text frame as UTF-8.'
+        ) {
+          return
+        }
+        // エラー
+        if (data.data === 'ERR') {
+          this.srSocket.close()
+          clearInterval(this.srSocketPing)
+          // 再接続
+          this.srConnect(this.bcsvr_key)
+        }
+
+        // JSON変換
+        const msgJson = JSON.parse(data.data.split(`MSG\t${bcsvrKey}`)[1])
+
+        switch (msgJson.t) {
+          case '1':
+            if (this.commentCountCheck(msgJson)) {
+              // コメント追加
+              this.commentData = {
+                id: msgJson.u,
+                name: msgJson.ac,
+                comment: msgJson.cm,
+                flg: msgJson.ua,
+                avatar: `https://image.showroom-cdn.com/showroom-prod/image/avatar/${msgJson.av}.png?v=85`,
+                kbn: 'showroom',
+              }
+              // エフェクト
+              this.commentEffect(msgJson)
+            }
+            break
+          case '2':
+            // ギフト
+            if (this.giftCheck(msgJson)) {
+              // 無料
+              if (this.fallFlg) {
+                this.fallGiftFree(msgJson)
+              }
+            } else {
+              // 有料
+              this.fallGift(msgJson)
+            }
+            break
+          case 101:
+            console.log('配信終了')
+            console.log(msgJson.created_at)
+            this.srSocket.close()
+            clearInterval(this.srSocketPing)
+            console.log('切断')
+            location.reload()
+            break
+          case 104:
+            this.srSocket.close()
+            clearInterval(this.srSocketPing)
+            // 再接続
+            location.reload()
+            break
+          default:
+          // console.log(msgJson)
+        }
+      }
+    },
+    ytConnect() {
+      // 接続
+      const sockety = new WebSocket(constants.ytws)
+      // 接続確認
+      sockety.onopen = (e) => {
+        console.log('YTコネクションを開始しました')
+      }
+      // 疎通確認
+      const checkYt = setInterval(() => {
+        sockety.send('PING')
+      }, 60000)
+      // エラー発生時
+      sockety.onerror = (error) => {
+        console.log(error)
+      }
+      // close時
+      sockety.onclose = (close) => {
+        console.log(close)
+        clearInterval(checkYt)
+        sockety.close()
+      }
+      // メッセージ受信
+      sockety.onmessage = (data) => {
+        this.getComment(JSON.parse(data.data))
+      }
+    },
+    commentCountCheck(msgJson) {
+      // 全角数字を半角に変換
+      const numberFormat = msgJson.cm.replace(/[０-９]/g, (s) => {
+        return String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+      })
+      if (
+        !isNaN(numberFormat) &&
+        Number(numberFormat) >= 0 &&
+        Number(numberFormat) <= 50
+      ) {
+        // カウント
+        return false
+      } else {
+        // コメント
+        return true
+      }
+    },
+    getComment(commentObj) {
+      let comment = ''
+      let customEmoji = false
+
+      for (let i = 0; i < commentObj.message.length; i++) {
+        if ('text' in commentObj.message[i]) {
+          if (
+            commentObj.author.name === undefined ||
+            commentObj.message[i].text === undefined
+          ) {
+            return
+          } else {
+            comment += commentObj.message[i].text
+          }
+        } else if (commentObj.message[i].isCustomEmoji) {
+          // カスタム絵文字
+          comment += `<img src="${commentObj.message[i].url}" class="customEmoji">`
+          customEmoji = commentObj.message[i].isCustomEmoji
+        } else if (!commentObj.message[i].isCustomEmoji) {
+          // 普通の絵文字
+          comment += commentObj.message[i].emojiText
+        } else {
+          // console.log(commentObj)
+        }
+      }
+
+      const waitTime =
+        new Date().getTime() - new Date(commentObj.timestamp).getTime()
+
+      setTimeout(() => {
+        this.commentData = {
+          name: commentObj.author.name,
+          comment,
+          avatar: commentObj.author.thumbnail.url,
+          customEmoji,
+          kbn: 'youtube',
+        }
+
+        this.commentEffect({
+          cm: comment,
+          u: Math.random().toString(32).substring(2),
+        })
+      }, waitTime)
+    },
+    giftCheck(msgJson) {
+      // ギフトチェック
+      if (msgJson.gt === 2) {
+        // 投票
+        if (Number(msgJson.g) > 10000 && Number(msgJson.g) <= 10070) {
+          // 投票ボール
+        } else if (msgJson.g === 1601) {
+          // 虹星
+          return false
+        } else if (
+          msgJson.g === 1 ||
+          msgJson.g === 1001 ||
+          msgJson.g === 1002 ||
+          msgJson.g === 1003 ||
+          msgJson.g === 2 ||
+          msgJson.g === 1501 ||
+          msgJson.g === 1502 ||
+          msgJson.g === 1503 ||
+          msgJson.g === 1504 ||
+          msgJson.g === 1505
+        ) {
+          // 無料
+          return true
+        } else {
+          // 星以外のフリーギフト
+          return false
+        }
+      } else {
+        // 有料
+        return false
+      }
+    },
+    commentEffect(commentObj) {
+      switch (commentObj.cm) {
+        case 'ぽん':
+        case 'ポン':
+        case 'ぽん！':
+        case 'ポン！':
+          this.fallPon(commentObj.u, 'fallPon', 30, 100)
+          this.pon++
+          break
+        case 'ぽん.':
+        case 'ポン.':
+        case 'ぽん！.':
+        case 'ポン！.':
+          this.fallPon(commentObj.u, 'fallPon_bk', 30, 100)
+          this.pon++
+          break
+        case '草':
+        case 'www':
+        case 'ｗｗｗ':
+          this.fallAther(commentObj.u, 'kusa', 100, 100)
+          break
+        case '大草原':
+        case 'wwwwww':
+        case 'ｗｗｗｗｗｗｗｗ':
+          this.fallAther(commentObj.u, 'daisougen', 100, 200)
+          break
+        case '88888888':
+        case '８８８８８８８８':
+        case '👏👏👏👏👏👏👏👏':
+          this.fallAther(commentObj.u, '8_0', 25, 100)
+          this.fallAther(commentObj.u, '8_1', 10, 50)
+          this.fallAther(commentObj.u, '8_2', 10, 50)
+          this.fallAther(commentObj.u, '8_3', 10, 50)
+          break
+        case 'きゅうり':
+        case 'キュウリ':
+        case '🥒':
+          this.fallAther(commentObj.u, 'cucumber1', 25, 100)
+          this.fallAther(commentObj.u, 'cucumber2', 25, 100)
+          this.fallAther(commentObj.u, 'cucumber3', 25, 100)
+          this.fallAther(commentObj.u, 'cucumber4', 25, 100)
+          this.fallAther(commentObj.u, 'cucumber5', 25, 100)
+          break
+        case 'なすぅ…':
+        case 'なす':
+        case 'ナス':
+        case '🍆':
+          this.fallAther(commentObj.u, 'nasu', 25, 100)
+          this.fallAther(commentObj.u, 'nasu1', 25, 100)
+          break
+        case '生首':
+        case '首':
+        case 'なまくび':
+        case 'くび':
+          this.fallAther(commentObj.u, 'kubi', 25, 100)
+          break
+        case 'むじかりこ':
+          this.fallAther(commentObj.u, 'jagarico-icon', 25, 100)
+          break
+        default:
+        // console.log('other')
+      }
+    },
+    fallGiftFree(gift) {
+      // 画面幅を取得
+      const width = window.innerWidth
+      const elmId = Math.random().toString(32).substring(2)
+
+      // ギフトの数分ループ
+      for (let i = 0; i < gift.n; i++) {
+        // 要素のID
+        const id = `gift_${gift.u}_${gift.g}_${i}_${elmId}`
+        // ギフト画像の要素を作成
+        const giftImgElement = document.createElement('img')
+        // 画像を設定
+        if (i <= 9) {
+          giftImgElement.src = require(`@/assets/image/${i}.png`)
+          giftImgElement.style.width = '50px'
+        } else if (i === 10) {
+          giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`
+          giftImgElement.style.width = '50px'
+        } else {
+          giftImgElement.src = require(`@/assets/image/${Math.floor(
+            this.getRandomNum(0, 9)
+          )}.png`)
+          giftImgElement.style.width = '50px'
+        }
+
+        // IDを設定
+        giftImgElement.setAttribute('id', id)
+        // 配置位置を設定
+        giftImgElement.style.position = 'absolute'
+        giftImgElement.style.top = '1100px' // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(10, width - 70) + 'px' // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById('gift').append(giftImgElement)
+
+        // 動きを追加
+        this.gsaoExe(id)
+      }
+    },
+    fallGift(gift) {
+      // 画面幅を取得
+      const width = window.innerWidth
+      const elmId = Math.random().toString(32).substring(2)
+
+      // ギフトの数分ループ
+      for (let i = 0; i < gift.n; i++) {
+        // 要素のID
+        const id = `gift_${gift.u}_${gift.g}_${i}_${elmId}`
+        // ギフト画像の要素を作成
+        const giftImgElement = document.createElement('img')
+        // 画像を設定
+        giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/assets/img/gift/${gift.g}_s.png`
+        giftImgElement.style.width = '100px'
+        // IDを設定
+        giftImgElement.setAttribute('id', id)
+        // 配置位置を設定
+        giftImgElement.style.position = 'absolute'
+        giftImgElement.style.top = '1100px' // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(10, width - 70) + 'px' // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById('gift').append(giftImgElement)
+
+        // 動きを追加
+        this.gsaoExe(id)
+      }
+    },
+    fallAther(userId, img, num, size) {
+      // 画面幅を取得
+      const width = window.innerWidth
+      const elmId = Math.random().toString(32).substring(2)
+
+      // ギフトの数分ループ
+      for (let i = 0; i < num; i++) {
+        // 要素のID
+        const id = `pon_${userId}_${i}_${elmId}`
+        // ギフト画像の要素を作成
+        const giftImgElement = document.createElement('img')
+        // 画像を設定
+        giftImgElement.src = require(`@/assets/image/${img}.png`)
+        giftImgElement.style.width = `${size}px`
+        giftImgElement.style.zIndex = 100
+        // IDを設定
+        giftImgElement.setAttribute('id', id)
+        // 配置位置を設定
+        giftImgElement.style.position = 'absolute'
+        giftImgElement.style.top = '1100px' // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(10, width - 70) + 'px' // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById('gift').append(giftImgElement)
+
+        // 動きを追加
+        this.gsaoExe(id)
+      }
+    },
+    fallPon(userId, img, num, size) {
+      // 画面幅を取得
+      const width = window.innerWidth
+      const elmId = Math.random().toString(32).substring(2)
+
+      // ギフトの数分ループ
+      for (let i = 0; i < num; i++) {
+        // 要素のID
+        const id = `pon_${userId}_${i}_${elmId}`
+        // ギフト画像の要素を作成
+        const giftImgElement = document.createElement('img')
+        // 画像を設定
+        giftImgElement.src = require(`@/assets/image/${img}.png`)
+        giftImgElement.style.width = `${size}px`
+        giftImgElement.style.zIndex = 100
+        // IDを設定
+        giftImgElement.setAttribute('id', id)
+        // 配置位置を設定
+        giftImgElement.style.position = 'absolute'
+        giftImgElement.style.top = '1100px' // 画面外に配置
+        giftImgElement.style.left = this.getRandomNum(300, width - 70) + 'px' // ランダムに配置
+        // ギフト要素を画面に追加
+        document.getElementById('gift').append(giftImgElement)
+
+        // 動きを追加
+        this.gsaoExe(id)
+      }
+    },
+    gsaoExe(elementId) {
+      gsap.to(`#${elementId}`, {
+        duration: this.getRandomNum(6, 9), // 2秒～5秒の間で移動
+        rotation: this.getRandomNum(90, 720), // 回転角度
+        y: -1300, // 落ちる高さ
+        onComplete: () => {
+          if (document.getElementById(elementId) !== null) {
+            document.getElementById(elementId).remove() // 終わったら要素を削除
+          }
+        },
+      })
+      setTimeout(() => {
+        if (document.getElementById(elementId) !== null) {
+          document.getElementById(elementId).remove()
+        }
+      }, 10000)
+    },
+    getRandomNum(min, max) {
+      min = Math.ceil(min)
+      max = Math.floor(max)
+      return Math.random() * (max - min + 1) + min
+    },
+  },
+}
+</script>
+
+<style scoped>
+#piano-bg-video {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: -100;
+}
+
+.header-title {
+  position: relative;
+  z-index: 2;
+}
+
+#piano-logo {
+  position: absolute;
+  height: 20vh;
+  top: 79.5vh;
+  left: -45px;
+}
+
+.pianoCommentArea {
+  margin-top: 15vh;
+  /* margin-right: 182px; */
+  float: right;
+  width: 15.5vw;
+  height: 49vh;
+}
+
+.scrollbar {
+  overflow: scroll;
+}
+
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>

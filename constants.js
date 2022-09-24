@@ -1,8 +1,7 @@
 const constants = {
   url: {
-    main: "https://showroom-app-api.herokuapp.com",
+    main: "https://yoichiro-api-v1.site:61808",
     sub: "https://showroom-app-api.herokuapp.com",
-    search: "other/search?keyword=",
     live: {
       onlives: "/live/onlives",
       premium: "/live/premium",
@@ -20,10 +19,15 @@ const constants = {
       profile: "/users/profile/",
     },
     other: {
-      broadcast: "/other/broadcast"
+      broadcast: "/other/broadcast",
+      status: "/other/status",
+      search: "/other/search?keyword=",
     }
   },
   ws: "wss://online.showroom-live.com",
+  ytws: "wss://yoichiro-api-v1.site:61808/ws/",
+  roomId: 373889,
+  roomUrl: '/PianistMusica',
 }
 
 module.exports = Object.freeze(constants);

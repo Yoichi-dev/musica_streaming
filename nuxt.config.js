@@ -2,47 +2,37 @@ export default {
   ssr: false,
   target: 'static',
   head: {
-    title: 'musica-comment',
+    title: '塔野ムジカ',
+    htmlAttrs: {
+      lang: 'ja',
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '塔野ムジカ専用コメントビューワー' },
-      { name: 'format-detection', content: 'telephone=no' }
+      { name: 'format-detection', content: 'telephone=no' },
     ],
     script: [
-      // {
-      //   src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js'
-      // },
       {
         src: 'https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.6/dayjs.min.js'
       }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap'
-      }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   css: [
     '@/assets/css/main.css',
   ],
-  plugins: [
-  ],
+  plugins: [],
   components: true,
   buildModules: [
+    '@nuxtjs/eslint-module',
   ],
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
     '@nuxtjs/dotenv',
   ],
-  axios: {},
-  pwa: {
-    manifest: {
-      lang: 'ja'
-    }
+  axios: {
+    baseURL: '/',
   },
   server: {
     host: '0.0.0.0'
@@ -50,6 +40,5 @@ export default {
   generate: {
     fallback: true
   },
-  build: {
-  }
+  build: {},
 }
