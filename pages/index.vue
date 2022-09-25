@@ -38,10 +38,21 @@ export default {
       srSocketPing: null,
       bcsvr_key: null,
       fallFlg: false,
+      youtubeFlg: false,
+      youtubeCount: 0,
     }
   },
   mounted() {
-    this.ytConnect()
+    const checkYt = setInterval(() => {
+      if (this.youtubeFlg || this.youtubeCount > 10) {
+        console.log('YTのチェックを終了')
+        clearInterval(checkYt)
+        return
+      }
+      this.ytConnect()
+      this.youtubeCount++
+    }, 30000)
+
     axios
       .get(
         `${constants.url.main}${constants.url.other.status}${constants.roomUrl}`
@@ -184,9 +195,18 @@ export default {
         console.log(close)
         clearInterval(checkYt)
         sockety.close()
+        if (this.youtubeFlg) {
+          console.log('配信中に切断の可能性有り、再接続開始')
+          this.ytConnect()
+        }
       }
       // メッセージ受信
       sockety.onmessage = (data) => {
+        if (data.data === 'live') {
+          console.log('配信が開始されている')
+          this.youtubeFlg = true
+          return
+        }
         this.getComment(JSON.parse(data.data))
       }
     },
