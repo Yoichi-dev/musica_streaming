@@ -31,6 +31,7 @@ export default {
       fallFlg: false,
       youtubeFlg: false,
       youtubeCount: 0,
+      sockety: null,
     }
   },
   mounted() {
@@ -167,38 +168,41 @@ export default {
       }
     },
     ytConnect() {
-      // 接続
-      const sockety = new WebSocket(constants.ytws)
-      // 接続確認
-      sockety.onopen = (e) => {
-        console.log('YTコネクションを開始しました')
-      }
-      // 疎通確認
-      const checkYt = setInterval(() => {
-        sockety.send('PING')
-      }, 60000)
-      // エラー発生時
-      sockety.onerror = (error) => {
-        console.log(error)
-      }
-      // close時
-      sockety.onclose = (close) => {
-        console.log(close)
-        clearInterval(checkYt)
-        sockety.close()
-        if (this.youtubeFlg) {
-          console.log('配信中に切断の可能性有り、再接続開始')
-          this.ytConnect()
+      if (this.sockety === null) {
+        // 接続
+        this.sockety = new WebSocket(constants.ytws)
+        // 接続確認
+        this.sockety.onopen = (e) => {
+          console.log('YTコネクションを開始しました')
         }
-      }
-      // メッセージ受信
-      sockety.onmessage = (data) => {
-        if (data.data === 'live') {
-          console.log('配信が開始されている')
-          this.youtubeFlg = true
-          return
+        // 疎通確認
+        const checkYt = setInterval(() => {
+          this.sockety.send('PING')
+        }, 60000)
+        // エラー発生時
+        this.sockety.onerror = (error) => {
+          console.log(error)
         }
-        this.getComment(JSON.parse(data.data))
+        // close時
+        this.sockety.onclose = (close) => {
+          console.log(close)
+          clearInterval(checkYt)
+          this.sockety.close()
+          this.sockety = null
+          if (this.youtubeFlg) {
+            console.log('配信中に切断の可能性有り、再接続開始')
+            this.ytConnect()
+          }
+        }
+        // メッセージ受信
+        this.sockety.onmessage = (data) => {
+          if (data.data === 'live') {
+            console.log('配信が開始されている')
+            this.youtubeFlg = true
+            return
+          }
+          this.getComment(JSON.parse(data.data))
+        }
       }
     },
     commentCountCheck(msgJson) {
