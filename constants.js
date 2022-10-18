@@ -1,7 +1,7 @@
 const constants = {
   url: {
-    main: "https://yoichiro-api-v1.site:61808",
-    sub: "https://showroom-app-api.herokuapp.com",
+    main: "https://pianistmusica.net",
+    sub: "https://pianistmusica.net",
     live: {
       onlives: "/live/onlives",
       premium: "/live/premium",
@@ -25,7 +25,7 @@ const constants = {
     }
   },
   ws: "wss://online.showroom-live.com",
-  ytws: "wss://yoichiro-api-v1.site:61808/ws/",
+  ytws: "wss://pianistmusica.net/ws/",
   roomId: 373889,
   roomUrl: '/PianistMusica',
 }

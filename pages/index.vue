@@ -389,7 +389,6 @@ export default {
           giftImgElement.src = `https://image.showroom-cdn.com/showroom-prod/image/avatar/${gift.av}.png?v=85`
           giftImgElement.style.width = '50px'
         } else {
-          console.log(Math.floor(this.getRandomNum(0, 9)))
           giftImgElement.src = require(`@/assets/image/${Math.floor(
             this.getRandomNum(0, 9)
           )}.png`)
