@@ -22,12 +22,17 @@ const constants = {
       broadcast: "/other/broadcast",
       status: "/other/status",
       search: "/other/search?keyword=",
+    },
+    youtube: {
+      channel: "/youtube/channel/",
+      comment: "/youtube/comment"
     }
   },
   ws: "wss://online.showroom-live.com",
   ytws: "wss://pianistmusica.net/ws/",
   roomId: 373889,
   roomUrl: '/PianistMusica',
+  channelId: 'UCFdcDkKQJbK76e_1zxYXsDA'
 }
 
 module.exports = Object.freeze(constants);

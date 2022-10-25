@@ -32,18 +32,12 @@ export default {
       youtubeFlg: false,
       youtubeCount: 0,
       sockety: null,
+      youtubeKey: null,
     }
   },
   mounted() {
-    const checkYt = setInterval(() => {
-      if (this.youtubeFlg || this.youtubeCount > 10) {
-        console.log('YTのチェックを終了')
-        clearInterval(checkYt)
-        return
-      }
-      this.ytConnect()
-      this.youtubeCount++
-    }, 30000)
+    // YouTube接続
+    this.getYoutubeKey()
 
     axios
       .get(
@@ -167,6 +161,45 @@ export default {
         }
       }
     },
+    getYoutubeKey() {
+      const youtubeCheckKey = setInterval(() => {
+        axios
+          .get(
+            `${constants.url.main}${constants.url.youtube.channel}${constants.channelId}`
+          )
+          .then((res) => {
+            this.youtubeKey = res.data
+            if (res.data.flg) {
+              // 配信枠有り
+              clearInterval(youtubeCheckKey)
+              this.getYoutubeComment()
+            }
+          })
+          .catch((e) => {
+            console.log(e)
+          })
+      }, 5000)
+    },
+    getYoutubeComment() {
+      // コメント取得
+      const yuCommentCheck = setInterval(() => {
+        axios
+          .post(`${constants.url.main}${constants.url.youtube.comment}`, {
+            key: this.youtubeKey.key,
+            continuation: this.youtubeKey.continuation,
+          })
+          .then((res) => {
+            for (const oneCom of res.data.item) {
+              this.getComment(oneCom)
+            }
+            this.youtubeKey.continuation = res.data.nextContinuation
+          })
+          .catch((e) => {
+            clearInterval(yuCommentCheck)
+            this.getYoutubeKey()
+          })
+      }, 5000)
+    },
     ytConnect() {
       if (this.sockety === null) {
         // 接続
@@ -226,23 +259,16 @@ export default {
       let comment = ''
       let customEmoji = false
 
-      for (let i = 0; i < commentObj.message.length; i++) {
-        if ('text' in commentObj.message[i]) {
-          if (
-            commentObj.author.name === undefined ||
-            commentObj.message[i].text === undefined
-          ) {
-            return
-          } else {
-            comment += commentObj.message[i].text
-          }
-        } else if (commentObj.message[i].isCustomEmoji) {
+      for (let i = 0; i < commentObj.comment.length; i++) {
+        if ('text' in commentObj.comment[i]) {
+          comment += commentObj.comment[i].text
+        } else if (commentObj.comment[i].isCustomEmoji) {
           // カスタム絵文字
-          comment += `<img src="${commentObj.message[i].url}" class="customEmoji">`
-          customEmoji = commentObj.message[i].isCustomEmoji
-        } else if (!commentObj.message[i].isCustomEmoji) {
+          comment += `<img src="${commentObj.comment[i].emoji}" class="customEmoji">`
+          customEmoji = commentObj.comment[i].isCustomEmoji
+        } else if (!commentObj.comment[i].isCustomEmoji) {
           // 普通の絵文字
-          comment += commentObj.message[i].emojiText
+          comment += commentObj.comment[i].emoji
         } else {
           // console.log(commentObj)
         }
@@ -253,9 +279,9 @@ export default {
 
       setTimeout(() => {
         this.commentData = {
-          name: commentObj.author.name,
+          name: commentObj.name,
           comment,
-          avatar: commentObj.author.thumbnail.url,
+          avatar: commentObj.img,
           customEmoji,
           kbn: 'youtube',
         }
