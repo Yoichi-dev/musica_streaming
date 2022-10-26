@@ -171,7 +171,14 @@ export default {
       }
     },
     getYoutubeKey() {
+      // 15分反応が無ければチェック終了
+      let limitCount = 0
       const youtubeCheckKey = setInterval(() => {
+        if (limitCount > 10) {
+          clearInterval(youtubeCheckKey)
+          console.log('YouTubeでの配信は無し')
+          return
+        }
         axios
           .get(
             `${constants.url.main}${constants.url.youtube.channel}${constants.channelId}`
@@ -187,6 +194,7 @@ export default {
           .catch((e) => {
             console.log(e)
           })
+        limitCount++
       }, 5000)
     },
     getYoutubeComment() {
