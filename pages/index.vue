@@ -42,11 +42,13 @@ export default {
       youtubeCount: 0,
       sockety: null,
       youtubeKey: null,
+      ytCheckPing: null,
+      yuCommentPing: null,
     }
   },
   mounted() {
     // YouTube接続
-    // this.getYoutubeKey()
+    this.getYoutubeKey()
 
     axios
       .get(
@@ -173,49 +175,56 @@ export default {
     getYoutubeKey() {
       // 15分反応が無ければチェック終了
       let limitCount = 0
-      const youtubeCheckKey = setInterval(() => {
-        if (limitCount > 10) {
-          clearInterval(youtubeCheckKey)
-          console.log('YouTubeでの配信は無し')
-          return
-        }
-        axios
-          .get(
-            `${constants.url.main}${constants.url.youtube.channel}${constants.channelId}`
-          )
-          .then((res) => {
-            this.youtubeKey = res.data
-            if (res.data.flg) {
-              // 配信枠有り
-              clearInterval(youtubeCheckKey)
-              this.getYoutubeComment()
-            }
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-        limitCount++
-      }, 5000)
+      if (this.ytCheckPing === null) {
+        this.ytCheckPing = setInterval(() => {
+          if (limitCount > 10) {
+            clearInterval(this.ytCheckPing)
+            console.log('YouTubeでの配信は無し')
+            return
+          }
+          axios
+            .get(
+              `${constants.url.main}${constants.url.youtube.channel}${constants.channelId}`
+            )
+            .then((res) => {
+              this.youtubeKey = res.data
+              if (res.data.flg) {
+                // 配信枠有り
+                clearInterval(this.ytCheckPing)
+                this.getYoutubeComment()
+              }
+            })
+            .catch((e) => {
+              console.log(e)
+            })
+          limitCount++
+        }, 5000)
+      }
     },
     getYoutubeComment() {
+      const nowDateTime = new Date().getTime()
       // コメント取得
-      const yuCommentCheck = setInterval(() => {
-        axios
-          .post(`${constants.url.main}${constants.url.youtube.comment}`, {
-            key: this.youtubeKey.key,
-            continuation: this.youtubeKey.continuation,
-          })
-          .then((res) => {
-            for (const oneCom of res.data.item) {
-              this.getComment(oneCom)
-            }
-            this.youtubeKey.continuation = res.data.nextContinuation
-          })
-          .catch((e) => {
-            clearInterval(yuCommentCheck)
-            this.getYoutubeKey()
-          })
-      }, 5000)
+      if (this.yuCommentPing === null) {
+        this.yuCommentPing = setInterval(() => {
+          axios
+            .post(`${constants.url.main}${constants.url.youtube.comment}`, {
+              key: this.youtubeKey.key,
+              continuation: this.youtubeKey.continuation,
+            })
+            .then((res) => {
+              for (const oneCom of res.data.item) {
+                if (new Date(oneCom.timestamp).getTime() > nowDateTime) {
+                  this.getComment(oneCom)
+                }
+              }
+              this.youtubeKey.continuation = res.data.nextContinuation
+            })
+            .catch((e) => {
+              clearInterval(this.yuCommentPing)
+              this.getYoutubeKey()
+            })
+        }, 5000)
+      }
     },
     ytConnect() {
       if (this.sockety === null) {
