@@ -37,7 +37,7 @@ export default {
   },
   mounted() {
     // YouTube接続
-    this.getYoutubeKey()
+    // this.getYoutubeKey()
 
     axios
       .get(
