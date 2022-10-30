@@ -176,7 +176,7 @@ export default {
           }
           axios
             .get(
-              `${constants.url.main}${constants.url.youtube.channel}${constants.channelId}`
+              `${constants.url.sub}${constants.url.youtube.channel}${constants.channelId}`
             )
             .then((res) => {
               this.youtubeKey = res.data
@@ -200,7 +200,7 @@ export default {
       if (this.yuCommentPing === null) {
         this.yuCommentPing = setInterval(() => {
           axios
-            .post(`${constants.url.main}${constants.url.youtube.comment}`, {
+            .post(`${constants.url.sub}${constants.url.youtube.comment}`, {
               key: this.youtubeKey.key,
               continuation: this.youtubeKey.continuation,
             })

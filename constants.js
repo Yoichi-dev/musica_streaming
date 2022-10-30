@@ -1,6 +1,6 @@
 const constants = {
   url: {
-    main: "https://pianistmusica.net/yt",
+    main: "https://pianistmusica.net",
     sub: "https://pianistmusica.net/yt",
     live: {
       onlives: "/live/onlives",
