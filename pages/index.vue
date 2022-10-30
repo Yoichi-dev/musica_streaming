@@ -179,6 +179,7 @@ export default {
         this.ytCheckPing = setInterval(() => {
           if (limitCount > 10) {
             clearInterval(this.ytCheckPing)
+            this.ytCheckPing = null
             console.log('YouTubeでの配信は無し')
             return
           }
@@ -191,6 +192,7 @@ export default {
               if (res.data.flg) {
                 // 配信枠有り
                 clearInterval(this.ytCheckPing)
+                this.ytCheckPing = null
                 this.getYoutubeComment()
               }
             })
@@ -212,15 +214,22 @@ export default {
               continuation: this.youtubeKey.continuation,
             })
             .then((res) => {
-              for (const oneCom of res.data.item) {
-                if (new Date(oneCom.timestamp).getTime() > nowDateTime) {
-                  this.getComment(oneCom)
+              if (res.data.flg) {
+                for (const oneCom of res.data.item) {
+                  if (new Date(oneCom.timestamp).getTime() > nowDateTime) {
+                    this.getComment(oneCom)
+                  }
                 }
+                this.youtubeKey.continuation = res.data.nextContinuation
+              } else {
+                clearInterval(this.yuCommentPing)
+                this.yuCommentPing = null
+                this.getYoutubeKey()
               }
-              this.youtubeKey.continuation = res.data.nextContinuation
             })
             .catch((e) => {
               clearInterval(this.yuCommentPing)
+              this.yuCommentPing = null
               this.getYoutubeKey()
             })
         }, 5000)
