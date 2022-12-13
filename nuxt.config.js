@@ -31,8 +31,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
   ],
-  axios: {
-    baseURL: '/',
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://api.showroom-app.com'
   },
   server: {
     host: '0.0.0.0'

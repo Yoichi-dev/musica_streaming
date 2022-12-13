@@ -2,6 +2,7 @@ const constants = {
   url: {
     main: "https://api.showroom-app.com",
     sub: "https://api.showroom-app.com/yt",
+    showroom_api: "/showroom/api",
     live: {
       onlives: "/live/onlives",
       premium: "/live/premium",

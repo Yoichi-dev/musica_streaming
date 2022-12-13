@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { gsap } from 'gsap'
+import axios from '~/plugins/axios'
 import constants from '~/constants'
 
 export default {
@@ -42,9 +42,11 @@ export default {
     this.getYoutubeKey()
 
     axios
-      .get(
-        `${constants.url.main}${constants.url.other.status}${constants.roomUrl}`
-      )
+      .post(constants.url.showroom_api, {
+        category: 'room',
+        type: 'status',
+        key: constants.roomUrl,
+      })
       .then((res) => {
         this.roomStatus = res.data
         this.bcsvr_key = res.data.broadcast_key
@@ -59,13 +61,32 @@ export default {
     premiumLive() {
       const checkStreaming = setInterval(() => {
         axios
-          .get(`${constants.url.main}${constants.url.live.premium}`)
-          .then((response) => {
-            if (response.data.length !== 0) {
-              for (const data of response.data) {
-                if (data.room_id === constants.roomId) {
+          .post(constants.url.showroom_api, {
+            category: 'live',
+            type: 'onlives',
+            key: new Date().getTime(),
+          })
+          .then((res) => {
+            const premiumList = []
+            for (let i = 0; i < res.data.onlives.length; i++) {
+              if (
+                res.data.onlives[i].genre_id >= 100 &&
+                res.data.onlives[i].genre_id <= 200
+              ) {
+                const check = res.data.onlives[i].lives.find(
+                  (e) => e.premium_room_type === 1
+                )
+                if (check !== undefined) {
+                  premiumList.push(check)
+                }
+              }
+            }
+            if (premiumList.length !== 0) {
+              for (const data of premiumList) {
+                if (data.room_id === Number(localStorage.room_id)) {
                   this.bcsvr_key = data.bcsvr_key
                   this.roomStatus = data
+
                   clearInterval(checkStreaming)
                   // 接続
                   this.srConnect(data.bcsvr_key)
