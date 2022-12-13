@@ -32,7 +32,7 @@ const constants = {
   ws: "wss://online.showroom-live.com",
   ytws: "wss://pianistmusica.net/ws/",
   roomId: 373889,
-  roomUrl: '/PianistMusica',
+  roomUrl: 'PianistMusica',
   channelId: 'UCFdcDkKQJbK76e_1zxYXsDA'
 }
 
