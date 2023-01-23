@@ -48,13 +48,16 @@ export default {
         key: constants.roomUrl,
       })
       .then((res) => {
-        this.roomStatus = res.data
-        this.bcsvr_key = res.data.broadcast_key
-        this.srConnect(res.data.broadcast_key)
-      })
-      .catch((e) => {
-        console.log('プレミアム配信かも？')
-        this.premiumLive()
+        if ('errors' in res.data) {
+          if ('redirect_url' in res.data.errors[0]) {
+            console.log('プレミアム配信かも？')
+            this.premiumLive()
+          }
+        } else {
+          this.roomStatus = res.data
+          this.bcsvr_key = res.data.broadcast_key
+          this.srConnect(res.data.broadcast_key)
+        }
       })
   },
   methods: {
@@ -83,7 +86,7 @@ export default {
             }
             if (premiumList.length !== 0) {
               for (const data of premiumList) {
-                if (data.room_id === Number(localStorage.room_id)) {
+                if (data.room_id === constants.roomId) {
                   this.bcsvr_key = data.bcsvr_key
                   this.roomStatus = data
 
