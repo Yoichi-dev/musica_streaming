@@ -1,13 +1,6 @@
 <template>
   <div id="gift" class="bgimg">
-    <video
-      id="bg-video"
-      src="~/assets/video/comment.mp4"
-      muted
-      autoplay
-      playsinline
-      loop
-    ></video>
+    <video id="bg-video" src="~/assets/video/comment.mp4" muted autoplay playsinline loop></video>
     <img id="logo" src="~/assets/image/logo.png" />
     <Time />
     <Counter :pon="pon" />
@@ -149,7 +142,7 @@ export default {
         const msgJson = JSON.parse(data.data.split(`MSG\t${bcsvrKey}`)[1])
 
         switch (msgJson.t) {
-          case '1':
+          case 1:
             if (this.commentCountCheck(msgJson)) {
               // コメント追加
               this.commentData = {
@@ -164,7 +157,7 @@ export default {
               this.commentEffect(msgJson)
             }
             break
-          case '2':
+          case 2:
             // ギフト
             if (this.giftCheck(msgJson)) {
               // 無料
