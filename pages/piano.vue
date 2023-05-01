@@ -140,8 +140,8 @@ export default {
         // JSON変換
         const msgJson = JSON.parse(data.data.split(`MSG\t${bcsvrKey}`)[1])
 
-        switch (msgJson.t) {
-          case '1':
+        switch (Number(msgJson.t)) {
+          case 1:
             if (this.commentCountCheck(msgJson)) {
               // コメント追加
               this.commentData = {
@@ -156,7 +156,7 @@ export default {
               this.commentEffect(msgJson)
             }
             break
-          case '2':
+          case 2:
             // ギフト
             if (this.giftCheck(msgJson)) {
               // 無料
